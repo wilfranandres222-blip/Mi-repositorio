@@ -1,0 +1,776 @@
+<!doctype html>
+<html lang="es">
+ <head>
+  <meta charset="UTF-8">
+  <title>Nexena – Planeta de Blogs</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Tailwind via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script><!-- Canva SDKs -->
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    html, body {
+      height: 100%;
+    }
+    /* Ajustes base y fuente por defecto */
+    body {
+      margin: 0;
+    }
+
+    /* Dropdown visible al pasar o al tener foco */
+    .menu-group:focus-within .submenu,
+    .menu-group:hover .submenu {
+      display: block;
+    }
+
+    /* Scroll suave */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* Animación de brillo orbital en la portada */
+    @keyframes orbit-glow {
+      0% { transform: translateX(-10%) translateY(0) scale(1); opacity: 0.3; }
+      50% { transform: translateX(10%) translateY(-5%) scale(1.05); opacity: 0.6; }
+      100% { transform: translateX(-10%) translateY(0) scale(1); opacity: 0.3; }
+    }
+
+    .orbit-glow {
+      animation: orbit-glow 14s ease-in-out infinite;
+    }
+
+    /* Efecto de foco visible para accesibilidad */
+    :focus-visible {
+      outline: 2px solid #fbbf24;
+      outline-offset: 2px;
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="min-h-full bg-[#050816] text-white flex flex-col"><!-- HEADER -->
+  <header class="w-full border-b border-white/5 bg-gradient-to-r from-[#050816] via-[#0b1024] to-[#1a0b3a]/80 backdrop-blur-sm">
+   <nav class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between" aria-label="Navegación principal"><!-- Logo / Marca -->
+    <div class="flex items-center gap-2"><!-- Pequeño ícono tipo planeta -->
+     <div class="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-500 to-fuchsia-500 flex items-center justify-center shadow-lg shadow-fuchsia-500/40"><span class="text-xs font-semibold tracking-widest">NX</span>
+     </div><span id="logoText" class="text-xl font-semibold tracking-[0.25em] uppercase">Nexena</span>
+    </div><!-- Menú de navegación -->
+    <ul class="hidden md:flex items-center gap-6 text-sm font-medium"><!-- Inicio con submenú -->
+     <li class="relative menu-group"><button class="inline-flex items-center gap-1 px-2 py-1 rounded-md hover:bg-white/5 transition-colors duration-200" aria-haspopup="true" aria-expanded="false"> <span>Inicio</span>
+       <svg class="w-4 h-4" viewbox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.25a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clip-rule="evenodd" />
+       </svg></button> <!-- Submenú -->
+      <ul class="submenu absolute left-0 mt-2 w-44 rounded-lg bg-[#050816] border border-white/10 shadow-xl shadow-black/40 py-2 hidden z-20">
+       <li><a href="#portada" class="block px-4 py-2 text-sm hover:bg-white/5 transition-colors duration-150">Portada</a></li>
+       <li><a href="#descripcion" class="block px-4 py-2 text-sm hover:bg-white/5 transition-colors duration-150">¿Qué es Nexena?</a></li>
+       <li><a href="#subir" class="block px-4 py-2 text-sm hover:bg-white/5 transition-colors duration-150">Comparte tu proyecto</a></li>
+      </ul></li>
+     <li><a href="#contenido" class="px-2 py-1 rounded-md hover:bg-white/5 transition-colors duration-200">Contenido</a></li>
+     <li><a href="#subir" class="px-2 py-1 rounded-md hover:bg-white/5 transition-colors duration-200">Subir Proyecto</a></li>
+     <li><button id="accesoUsuarioBtn" class="px-3 py-1.5 rounded-full border border-indigo-400/60 bg-indigo-500/10 hover:bg-indigo-500/30 hover:border-indigo-300 transition-colors duration-200 text-xs tracking-wide cursor-pointer"> Acceso de Usuario </button></li>
+    </ul><!-- Menú móvil básico --> <button id="mobileMenuBtn" class="md:hidden inline-flex items-center justify-center w-9 h-9 rounded-md border border-white/10 hover:bg-white/10 transition-colors duration-200" aria-label="Abrir menú">
+     <svg class="w-5 h-5" viewbox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h10" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" />
+     </svg></button>
+   </nav><!-- Menú móvil desplegable -->
+   <div id="mobileMenu" class="md:hidden hidden border-t border-white/10 bg-[#050816]">
+    <nav class="max-w-6xl mx-auto px-4 py-3">
+     <ul class="flex flex-col gap-2 text-sm">
+      <li>
+       <details class="group"><summary class="flex items-center justify-between px-2 py-2 rounded-md hover:bg-white/5 cursor-pointer list-none"> <span>Inicio</span>
+         <svg class="w-4 h-4 transform group-open:rotate-180 transition-transform duration-200" viewbox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.25a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clip-rule="evenodd" />
+         </svg></summary>
+        <div class="mt-1 ml-2 border-l border-white/10 pl-3 flex flex-col gap-1"><a href="#portada" class="py-1 text-xs hover:text-indigo-300">Portada</a> <a href="#descripcion" class="py-1 text-xs hover:text-indigo-300">¿Qué es Nexena?</a> <a href="#subir" class="py-1 text-xs hover:text-indigo-300">Comparte tu proyecto</a>
+        </div>
+       </details></li>
+      <li><a href="#contenido" class="px-2 py-2 rounded-md hover:bg-white/5">Contenido</a></li>
+      <li><a href="#subir" class="px-2 py-2 rounded-md hover:bg-white/5">Subir Proyecto</a></li>
+      <li><button id="accesoUsuarioMobileBtn" class="w-full px-2 py-2 rounded-md border border-indigo-400/60 bg-indigo-500/10 hover:bg-indigo-500/30 text-xs inline-flex justify-center cursor-pointer"> Acceso de Usuario </button></li>
+     </ul>
+    </nav>
+   </div>
+  </header><!-- MAIN -->
+  <main class="flex-1 w-full"><!-- PORTADA PRINCIPAL -->
+   <section id="portada" class="w-full border-b border-white/5">
+    <div class="max-w-6xl mx-auto px-4 py-10 md:py-14 lg:py-16 grid grid-cols-1 lg:grid-cols-2 gap-10 items-center"><!-- Imagen de portada generada por IA (SVG) -->
+     <figure class="relative w-full h-full"><!-- Fondo tipo tarjeta -->
+      <div class="relative w-full h-full rounded-3xl bg-gradient-to-br from-[#101827] via-[#111827] to-[#1e1036] border border-white/10 overflow-hidden shadow-2xl shadow-fuchsia-500/30"><!-- Halo circular tipo planeta -->
+       <div class="absolute -right-16 -top-16 w-64 h-64 rounded-full bg-gradient-to-br from-indigo-500/40 via-fuchsia-500/40 to-cyan-400/40 blur-3xl opacity-60 orbit-glow pointer-events-none"></div>
+       <div class="absolute -left-20 -bottom-20 w-64 h-64 rounded-full bg-gradient-to-tr from-indigo-400/40 via-sky-400/40 to-fuchsia-500/40 blur-3xl opacity-50 pointer-events-none"></div><!-- Contenido del "planeta de blogs" -->
+       <div class="relative z-10 p-6 md:p-8 lg:p-10 flex flex-col gap-6"><!-- Título Nexena dentro de la imagen -->
+        <div class="flex flex-col gap-2"><span class="text-xs tracking-[0.35em] uppercase text-fuchsia-300/70">Planeta de Blogs</span>
+         <h1 class="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight"><span class="bg-gradient-to-r from-indigo-300 via-sky-300 to-fuchsia-300 bg-clip-text text-transparent"> NEXENA </span></h1>
+        </div><!-- Representación gráfica: órbitas y nodos tipo blogs conectados -->
+        <div class="relative w-full aspect-[4/3]">
+         <svg class="w-full h-full" viewbox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ilustración futurista de Nexena, planeta de blogs y conexiones tecnológicas"><!-- Fondo degradado --> <defs>
+           <lineargradient id="bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#1e293b" />
+            <stop offset="50%" stop-color="#0f172a" />
+            <stop offset="100%" stop-color="#111827" />
+           </lineargradient>
+           <radialgradient id="planet-grad" cx="50%" cy="40%" r="60%">
+            <stop offset="0%" stop-color="#60a5fa" stop-opacity="1" />
+            <stop offset="40%" stop-color="#6366f1" stop-opacity="0.95" />
+            <stop offset="100%" stop-color="#a855f7" stop-opacity="0.9" />
+           </radialgradient>
+           <lineargradient id="orbit-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.3" />
+            <stop offset="50%" stop-color="#818cf8" stop-opacity="0.9" />
+            <stop offset="100%" stop-color="#e879f9" stop-opacity="0.4" />
+           </lineargradient>
+          </defs> <!-- Fondo --> <rect x="0" y="0" width="400" height="300" fill="url(#bg-grad)" /> <!-- Estrellas --> <g fill="#e5e7eb" fill-opacity="0.55">
+           <circle cx="40" cy="40" r="1.5" />
+           <circle cx="90" cy="20" r="1" />
+           <circle cx="150" cy="50" r="1.2" />
+           <circle cx="230" cy="25" r="1.1" />
+           <circle cx="310" cy="40" r="1.4" />
+           <circle cx="360" cy="70" r="1" />
+           <circle cx="50" cy="120" r="1.2" />
+           <circle cx="340" cy="130" r="1.3" />
+           <circle cx="280" cy="220" r="1.1" />
+           <circle cx="70" cy="230" r="1" />
+          </g> <!-- Órbitas --> <g stroke="url(#orbit-grad)" stroke-width="1.2" stroke-opacity="0.9" fill="none">
+           <ellipse cx="200" cy="150" rx="130" ry="55" />
+           <ellipse cx="200" cy="150" rx="95" ry="40" />
+           <ellipse cx="200" cy="150" rx="60" ry="25" />
+          </g> <!-- Planeta central --> <circle cx="200" cy="150" r="55" fill="url(#planet-grad)" /> <!-- Brillo del planeta --> <circle cx="180" cy="130" r="20" fill="#dbeafe" fill-opacity="0.45" /> <!-- Cinturón de anillos --> <ellipse cx="200" cy="160" rx="80" ry="18" fill="rgba(15,23,42,0.9)" /> <ellipse cx="200" cy="158" rx="80" ry="18" fill="url(#orbit-grad)" fill-opacity="0.7" /> <!-- Nodos tipo blogs conectados --> <g stroke="#38bdf8" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" stroke-opacity="0.8" fill="none"><!-- Conexiones -->
+           <line x1="200" y1="150" x2="90" y2="110" />
+           <line x1="200" y1="150" x2="310" y2="90" />
+           <line x1="200" y1="150" x2="320" y2="195" />
+           <line x1="200" y1="150" x2="85" y2="200" />
+           <line x1="200" y1="150" x2="200" y2="260" />
+          </g> <!-- Tarjetas/nodos tipo ventanas de blog --> <g><!-- Nodo 1 -->
+           <rect x="65" y="90" width="55" height="36" rx="8" fill="#020617" fill-opacity="0.9" stroke="#6366f1" stroke-width="1" />
+           <rect x="72" y="98" width="40" height="6" rx="3" fill="#6366f1" />
+           <rect x="72" y="108" width="28" height="4" rx="2" fill="#e5e7eb" fill-opacity="0.8" />
+           <rect x="72" y="116" width="24" height="3" rx="1.5" fill="#9ca3af" fill-opacity="0.8" /> <!-- Nodo 2 -->
+           <rect x="297" y="70" width="65" height="42" rx="10" fill="#020617" fill-opacity="0.9" stroke="#e879f9" stroke-width="1" />
+           <circle cx="308" cy="82" r="5" fill="#a855f7" />
+           <rect x="318" y="78" width="34" height="4" rx="2" fill="#e5e7eb" fill-opacity="0.9" />
+           <rect x="306" y="90" width="42" height="4" rx="2" fill="#9ca3af" fill-opacity="0.9" />
+           <rect x="306" y="98" width="24" height="4" rx="2" fill="#38bdf8" fill-opacity="0.9" /> <!-- Nodo 3 -->
+           <rect x="305" y="185" width="70" height="40" rx="10" fill="#020617" fill-opacity="0.9" stroke="#38bdf8" stroke-width="1" />
+           <rect x="313" y="193" width="40" height="4" rx="2" fill="#e5e7eb" fill-opacity="0.9" />
+           <rect x="313" y="201" width="32" height="3" rx="1.5" fill="#9ca3af" fill-opacity="0.9" />
+           <circle cx="330" cy="213" r="7" fill="#4f46e5" />
+           <rect x="338" y="211" width="20" height="3" rx="1.5" fill="#a855f7" /> <!-- Nodo 4 -->
+           <rect x="55" y="190" width="70" height="42" rx="10" fill="#020617" fill-opacity="0.95" stroke="#22c55e" stroke-width="1" />
+           <rect x="63" y="198" width="26" height="4" rx="2" fill="#22c55e" />
+           <rect x="93" y="198" width="24" height="4" rx="2" fill="#e5e7eb" fill-opacity="0.9" />
+           <rect x="63" y="206" width="40" height="4" rx="2" fill="#9ca3af" fill-opacity="0.9" />
+           <circle cx="94" cy="218" r="6" fill="#38bdf8" /> <!-- Nodo 5 -->
+           <rect x="175" y="240" width="50" height="34" rx="9" fill="#020617" fill-opacity="0.95" stroke="#38bdf8" stroke-width="1" />
+           <rect x="183" y="248" width="34" height="4" rx="2" fill="#e5e7eb" fill-opacity="0.9" />
+           <rect x="183" y="256" width="24" height="3" rx="1.5" fill="#9ca3af" fill-opacity="0.9" />
+          </g> <!-- Pequeños puntos de conexión en la órbita --> <g fill="#f97316">
+           <circle cx="90" cy="110" r="3" />
+           <circle cx="310" cy="90" r="3" />
+           <circle cx="320" cy="195" r="3" />
+           <circle cx="85" cy="200" r="3" />
+           <circle cx="200" cy="260" r="3" />
+          </g>
+         </svg>
+        </div><!-- Pie de la imagen / slogan -->
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-xs text-slate-300/80">
+         <p class="flex items-center gap-2"><span class="inline-flex h-5 w-5 items-center justify-center rounded-full bg-indigo-500/30 text-[0.6rem] tracking-widest"> NX </span> <span>Planeta digital de proyectos, blogs y conexiones.</span></p>
+         <p class="text-[0.7rem] text-slate-400">Ilustración generada por IA · Estilo futurista minimalista.</p>
+        </div>
+       </div>
+      </div>
+     </figure><!-- Texto de portada -->
+     <div class="flex flex-col gap-5 lg:pl-4">
+      <h2 id="heroTitle" class="text-2xl md:text-3xl lg:text-4xl font-bold leading-snug">Bienvenido a Nexena – Planeta de Blogs</h2>
+      <p id="heroDescription" class="text-sm md:text-base text-slate-300 leading-relaxed">Nexena es un planeta digital donde aprendices y desarrolladores pueden publicar proyectos, compartir ideas, escribir entradas tipo blog y subir recursos como enlaces de GitHub, archivos .txt, documentos .docx y hojas de Excel. Es un espacio colaborativo para estudiantes del SENA y creadores de contenido.</p>
+      <div class="flex flex-wrap gap-3 mt-2"><a href="#subir" class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-indigo-500 to-fuchsia-500 text-sm font-semibold shadow-lg shadow-indigo-500/40 hover:shadow-fuchsia-500/40 hover:-translate-y-0.5 transition-all duration-200"> <span>Comenzar a publicar</span>
+        <svg class="w-4 h-4" viewbox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M10.75 3.75a.75.75 0 00-1.5 0v8.19L6.28 8.97a.75.75 0 10-1.06 1.06l4.25 4.25a.75.75 0 001.06 0l4.25-4.25a.75.75 0 10-1.06-1.06l-2.97 2.97V3.75z" />
+        </svg></a> <a href="#contenido" class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-indigo-400/60 bg-indigo-500/5 text-sm hover:bg-indigo-500/20 transition-all duration-200"> Explorar ideas </a>
+      </div>
+     </div>
+    </div>
+   </section><!-- SECCIÓN CONTENIDO / DESCRIPCIÓN PRINCIPAL -->
+   <section id="descripcion" class="border-b border-white/5 bg-[#050816]">
+    <div class="max-w-6xl mx-auto px-4 py-10 md:py-12">
+     <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-start"><!-- Descripción -->
+      <article class="space-y-4">
+       <h3 class="text-xl md:text-2xl font-semibold">Un ecosistema para tus proyectos digitales</h3>
+       <p class="text-sm md:text-base text-slate-300 leading-relaxed">En Nexena puedes organizar tus proyectos, documentar aprendizajes y compartir recursos con otros aprendices del SENA y la comunidad creativa. Imagina un planeta donde cada blog es una órbita y cada recurso una estrella conectada a tu conocimiento.</p>
+       <ul class="mt-4 space-y-2 text-sm text-slate-300">
+        <li class="flex items-start gap-2"><span class="mt-1 w-1.5 h-1.5 rounded-full bg-indigo-400"></span> <span>Publica proyectos con descripciones claras y enlaces a repositorios.</span></li>
+        <li class="flex items-start gap-2"><span class="mt-1 w-1.5 h-1.5 rounded-full bg-fuchsia-400"></span> <span>Comparte entradas tipo blog sobre tus avances, retos y soluciones.</span></li>
+        <li class="flex items-start gap-2"><span class="mt-1 w-1.5 h-1.5 rounded-full bg-sky-400"></span> <span>Sube recursos de apoyo como archivos de texto, documentos y hojas de cálculo.</span></li>
+       </ul>
+      </article><!-- Tarjetas rápidas de tipo contenido -->
+      <div id="contenido" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+       <div class="rounded-2xl border border-white/10 bg-white/5 p-4 flex flex-col gap-2 hover:-translate-y-1 hover:border-indigo-400/80 hover:bg-indigo-500/10 transition-all duration-200"><span class="text-xs uppercase tracking-wide text-indigo-300/90">Blogs</span>
+        <h4 class="text-sm font-semibold">Entradas técnicas</h4>
+        <p class="text-xs text-slate-300">Comparte artículos sobre programación, bases de datos, diseño y buenas prácticas.</p>
+       </div>
+       <div class="rounded-2xl border border-white/10 bg-white/5 p-4 flex flex-col gap-2 hover:-translate-y-1 hover:border-fuchsia-400/80 hover:bg-fuchsia-500/10 transition-all duration-200"><span class="text-xs uppercase tracking-wide text-fuchsia-300/90">Proyectos</span>
+        <h4 class="text-sm font-semibold">Portafolio vivo</h4>
+        <p class="text-xs text-slate-300">Presenta tus repositorios, prototipos y entregables para tus formaciones.</p>
+       </div>
+       <div class="rounded-2xl border border-white/10 bg-white/5 p-4 flex flex-col gap-2 hover:-translate-y-1 hover:border-sky-400/80 hover:bg-sky-500/10 transition-all duration-200"><span class="text-xs uppercase tracking-wide text-sky-300/90">Recursos</span>
+        <h4 class="text-sm font-semibold">Documentos &amp; guías</h4>
+        <p class="text-xs text-slate-300">Centraliza archivos .txt, .docx y .xlsx relacionados con tus actividades.</p>
+       </div>
+       <div class="rounded-2xl border border-white/10 bg-white/5 p-4 flex flex-col gap-2 hover:-translate-y-1 hover:border-emerald-400/80 hover:bg-emerald-500/10 transition-all duration-200"><span class="text-xs uppercase tracking-wide text-emerald-300/90">Colaboración</span>
+        <h4 class="text-sm font-semibold">Aprende en comunidad</h4>
+        <p class="text-xs text-slate-300">Conecta con otros aprendices y creadores para impulsar tus ideas.</p>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section><!-- SECCIÓN SUBIR CONTENIDO -->
+   <section id="subir" class="border-b border-white/5 bg-[#050816]">
+    <div class="max-w-3xl mx-auto px-4 py-10 md:py-12">
+     <header class="mb-6">
+      <h3 class="text-xl md:text-2xl font-semibold mb-2">Sube tu proyecto a Nexena</h3>
+      <p class="text-sm text-slate-300">Completa el formulario para publicar un nuevo proyecto. Esta es una maqueta de formulario: puedes escribir tu información, pero el envío es solo demostrativo.</p>
+     </header><!-- Mensaje de estado del envío -->
+     <div id="formStatus" class="hidden mb-4 text-sm rounded-lg border px-3 py-2"></div><!-- Formulario (maqueta, sin subida real de archivos) -->
+     <form id="projectForm" class="space-y-5"><!-- Nombre del autor -->
+      <div><label for="autor" class="block text-sm font-medium mb-1">Nombre del autor</label> <input id="autor" name="autor" type="text" required class="w-full rounded-lg border border-white/10 bg-[#020617] px-3 py-2 text-sm focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/40 transition-colors duration-150" placeholder="Escribe tu nombre completo">
+      </div><!-- Título del proyecto -->
+      <div><label for="tituloProyecto" class="block text-sm font-medium mb-1">Título del proyecto</label> <input id="tituloProyecto" name="tituloProyecto" type="text" required class="w-full rounded-lg border border-white/10 bg-[#020617] px-3 py-2 text-sm focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/40 transition-colors duration-150" placeholder="Ejemplo: Plataforma de Blogs Nexena">
+      </div><!-- Descripción -->
+      <div><label for="descripcionProyecto" class="block text-sm font-medium mb-1">Descripción</label> <textarea id="descripcionProyecto" name="descripcionProyecto" rows="4" required class="w-full rounded-lg border border-white/10 bg-[#020617] px-3 py-2 text-sm focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/40 transition-colors duration-150 resize-y" placeholder="Describe brevemente el objetivo, tecnologías utilizadas y público objetivo."></textarea>
+      </div><!-- Enlace de GitHub -->
+      <div><label for="github" class="block text-sm font-medium mb-1">Enlace de GitHub</label> <input id="github" name="github" type="url" pattern="https?://.+" class="w-full rounded-lg border border-white/10 bg-[#020617] px-3 py-2 text-sm focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/40 transition-colors duration-150" placeholder="https://github.com/usuario/repositorio">
+       <p class="mt-1 text-xs text-slate-400">Opcional, pero recomendado para proyectos de desarrollo.</p>
+      </div><!-- Subida de archivos (maqueta) -->
+      <div><label for="archivos" class="block text-sm font-medium mb-1"> Archivos (.txt, .docx, .xlsx) </label> <input id="archivos" name="archivos" type="file" multiple accept=".txt,.docx,.xlsx" class="block w-full text-xs text-slate-300 file:mr-3 file:py-1.5 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-indigo-500/80 file:text-white hover:file:bg-indigo-400 cursor-pointer">
+       <p class="mt-1 text-xs text-slate-400">Esta sección es de demostración: los archivos no se suben a un servidor.</p>
+      </div><!-- Botón Publicar -->
+      <div class="pt-2"><button id="submitBtn" type="submit" class="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-indigo-500 to-fuchsia-500 px-5 py-2.5 text-sm font-semibold shadow-lg shadow-indigo-500/40 hover:shadow-fuchsia-500/40 hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed"> <span id="submitText">Publicar</span>
+        <svg id="submitIcon" class="w-4 h-4" viewbox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M3.172 9.172a4 4 0 015.656-5.656l.586.586.586-.586a4 4 0 115.656 5.656L10 15.657l-6.828-6.485z" />
+        </svg><!-- Spinner oculto por defecto -->
+        <svg id="submitSpinner" class="w-4 h-4 animate-spin hidden" viewbox="0 0 24 24" aria-hidden="true"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" /> <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v3a5 5 0 00-5 5H4z" />
+        </svg></button>
+      </div>
+     </form>
+    </div>
+   </section><!-- SECCIÓN ACCESO USUARIO (INICIO DE SESIÓN Y REGISTRO) -->
+   <section id="acceso" class="border-b border-white/5 bg-[#050816]">
+    <div class="max-w-5xl mx-auto px-4 py-10 md:py-12">
+     <header class="text-center mb-8">
+      <h3 class="text-2xl md:text-3xl font-semibold mb-2">Acceso de Usuario</h3>
+      <p class="text-sm text-slate-300">Inicia sesión o crea tu cuenta para gestionar tus proyectos en Nexena</p>
+     </header><!-- Mensaje de estado de autenticación -->
+     <div id="authStatus" class="hidden mb-6 text-sm rounded-lg border px-4 py-3 max-w-2xl mx-auto"></div><!-- Contenedor de pestañas -->
+     <div class="max-w-2xl mx-auto"><!-- Pestañas de navegación -->
+      <div class="flex gap-2 mb-6 border-b border-white/10"><button id="tabLogin" class="tab-button px-6 py-3 text-sm font-semibold border-b-2 border-indigo-500 text-indigo-300 transition-colors duration-200" data-tab="login"> Iniciar Sesión </button> <button id="tabRegister" class="tab-button px-6 py-3 text-sm font-semibold border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition-colors duration-200" data-tab="register"> Registrarse </button>
+      </div><!-- Panel de Inicio de Sesión -->
+      <div id="loginPanel" class="tab-panel">
+       <div class="rounded-2xl border border-white/10 bg-white/5 p-6 md:p-8">
+        <form id="loginForm" class="space-y-5">
+         <div><label for="loginEmail" class="block text-sm font-medium mb-2">Correo electrónico</label> <input id="loginEmail" name="loginEmail" type="email" required class="w-full rounded-lg border border-white/10 bg-[#020617] px-4 py-2.5 text-sm focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/40 transition-colors duration-150" placeholder="tu@correo.com">
+         </div>
+         <div><label for="loginPassword" class="block text-sm font-medium mb-2">Contraseña</label>
+          <div class="relative"><input id="loginPassword" name="loginPassword" type="password" required minlength="6" class="w-full rounded-lg border border-white/10 bg-[#020617] px-4 py-2.5 text-sm focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/40 transition-colors duration-150" placeholder="••••••••"> <button type="button" id="toggleLoginPassword" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200 transition-colors duration-150" aria-label="Mostrar contraseña">
+            <svg class="w-5 h-5" viewbox="0 0 20 20" fill="currentColor"><path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" /> <path fill-rule="evenodd" d="M.664 10.59a1.651 1.651 0 010-1.186A10.004 10.004 0 0110 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0110 17c-4.257 0-7.893-2.66-9.336-6.41zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+            </svg></button>
+          </div>
+         </div>
+         <div class="flex items-center justify-between text-xs"><label class="flex items-center gap-2 cursor-pointer"> <input type="checkbox" id="rememberMe" class="w-4 h-4 rounded border-white/10 bg-[#020617] text-indigo-500 focus:ring-2 focus:ring-indigo-500/40"> <span class="text-slate-300">Recordarme</span> </label> <a href="#" class="text-indigo-400 hover:text-indigo-300 transition-colors duration-150"> ¿Olvidaste tu contraseña? </a>
+         </div><button id="loginBtn" type="submit" class="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-indigo-500 to-fuchsia-500 px-5 py-3 text-sm font-semibold shadow-lg shadow-indigo-500/40 hover:shadow-fuchsia-500/40 hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed"> <span id="loginText">Iniciar Sesión</span>
+          <svg id="loginIcon" class="w-5 h-5" viewbox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 4.25A2.25 2.25 0 015.25 2h5.5A2.25 2.25 0 0113 4.25v2a.75.75 0 01-1.5 0v-2a.75.75 0 00-.75-.75h-5.5a.75.75 0 00-.75.75v11.5c0 .414.336.75.75.75h5.5a.75.75 0 00.75-.75v-2a.75.75 0 011.5 0v2A2.25 2.25 0 0110.75 18h-5.5A2.25 2.25 0 013 15.75V4.25z" clip-rule="evenodd" /> <path fill-rule="evenodd" d="M19 10a.75.75 0 00-.75-.75H8.704l1.048-.943a.75.75 0 10-1.004-1.114l-2.5 2.25a.75.75 0 000 1.114l2.5 2.25a.75.75 0 101.004-1.114l-1.048-.943h9.546A.75.75 0 0019 10z" clip-rule="evenodd" />
+          </svg>
+          <svg id="loginSpinner" class="w-5 h-5 animate-spin hidden" viewbox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" /> <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v3a5 5 0 00-5 5H4z" />
+          </svg></button>
+         <p class="text-xs text-center text-slate-400 pt-2">Esta es una demostración. No se almacenan datos reales.</p>
+        </form>
+       </div>
+      </div><!-- Panel de Registro -->
+      <div id="registerPanel" class="tab-panel hidden">
+       <div class="rounded-2xl border border-white/10 bg-white/5 p-6 md:p-8">
+        <form id="registerForm" class="space-y-5">
+         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div><label for="registerName" class="block text-sm font-medium mb-2">Nombre completo</label> <input id="registerName" name="registerName" type="text" required class="w-full rounded-lg border border-white/10 bg-[#020617] px-4 py-2.5 text-sm focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/40 transition-colors duration-150" placeholder="Juan Pérez">
+          </div>
+          <div><label for="registerUsername" class="block text-sm font-medium mb-2">Nombre de usuario</label> <input id="registerUsername" name="registerUsername" type="text" required pattern="[a-zA-Z0-9_]{3,20}" class="w-full rounded-lg border border-white/10 bg-[#020617] px-4 py-2.5 text-sm focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/40 transition-colors duration-150" placeholder="juanperez">
+           <p class="mt-1 text-xs text-slate-400">3-20 caracteres, solo letras, números y guiones bajos</p>
+          </div>
+         </div>
+         <div><label for="registerEmail" class="block text-sm font-medium mb-2">Correo electrónico</label> <input id="registerEmail" name="registerEmail" type="email" required class="w-full rounded-lg border border-white/10 bg-[#020617] px-4 py-2.5 text-sm focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/40 transition-colors duration-150" placeholder="tu@correo.com">
+         </div>
+         <div><label for="registerPassword" class="block text-sm font-medium mb-2">Contraseña</label>
+          <div class="relative"><input id="registerPassword" name="registerPassword" type="password" required minlength="8" class="w-full rounded-lg border border-white/10 bg-[#020617] px-4 py-2.5 text-sm focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/40 transition-colors duration-150" placeholder="••••••••"> <button type="button" id="toggleRegisterPassword" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200 transition-colors duration-150" aria-label="Mostrar contraseña">
+            <svg class="w-5 h-5" viewbox="0 0 20 20" fill="currentColor"><path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" /> <path fill-rule="evenodd" d="M.664 10.59a1.651 1.651 0 010-1.186A10.004 10.004 0 0110 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0110 17c-4.257 0-7.893-2.66-9.336-6.41zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+            </svg></button>
+          </div>
+          <p class="mt-1 text-xs text-slate-400">Mínimo 8 caracteres</p>
+         </div>
+         <div><label for="registerConfirmPassword" class="block text-sm font-medium mb-2">Confirmar contraseña</label>
+          <div class="relative"><input id="registerConfirmPassword" name="registerConfirmPassword" type="password" required minlength="8" class="w-full rounded-lg border border-white/10 bg-[#020617] px-4 py-2.5 text-sm focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/40 transition-colors duration-150" placeholder="••••••••"> <button type="button" id="toggleRegisterConfirmPassword" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200 transition-colors duration-150" aria-label="Mostrar contraseña">
+            <svg class="w-5 h-5" viewbox="0 0 20 20" fill="currentColor"><path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" /> <path fill-rule="evenodd" d="M.664 10.59a1.651 1.651 0 010-1.186A10.004 10.004 0 0110 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0110 17c-4.257 0-7.893-2.66-9.336-6.41zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+            </svg></button>
+          </div>
+         </div>
+         <div><label for="registerRole" class="block text-sm font-medium mb-2">Tipo de usuario</label> <select id="registerRole" name="registerRole" required class="w-full rounded-lg border border-white/10 bg-[#020617] px-4 py-2.5 text-sm focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/40 transition-colors duration-150"> <option value="">Selecciona una opción</option> <option value="estudiante">Estudiante SENA</option> <option value="instructor">Instructor</option> <option value="desarrollador">Desarrollador</option> <option value="creador">Creador de contenido</option> </select>
+         </div>
+         <div class="flex items-start gap-2"><input type="checkbox" id="acceptTerms" required class="mt-1 w-4 h-4 rounded border-white/10 bg-[#020617] text-indigo-500 focus:ring-2 focus:ring-indigo-500/40"> <label for="acceptTerms" class="text-xs text-slate-300"> Acepto los <a href="#" class="text-indigo-400 hover:text-indigo-300">términos y condiciones</a> y la <a href="#" class="text-indigo-400 hover:text-indigo-300">política de privacidad</a> de Nexena </label>
+         </div><button id="registerBtn" type="submit" class="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-indigo-500 to-fuchsia-500 px-5 py-3 text-sm font-semibold shadow-lg shadow-indigo-500/40 hover:shadow-fuchsia-500/40 hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed"> <span id="registerText">Crear Cuenta</span>
+          <svg id="registerIcon" class="w-5 h-5" viewbox="0 0 20 20" fill="currentColor"><path d="M10 8a3 3 0 100-6 3 3 0 000 6zM3.465 14.493a1.23 1.23 0 00.41 1.412A9.957 9.957 0 0010 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 00-13.074.003z" />
+          </svg>
+          <svg id="registerSpinner" class="w-5 h-5 animate-spin hidden" viewbox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" /> <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v3a5 5 0 00-5 5H4z" />
+          </svg></button>
+         <p class="text-xs text-center text-slate-400 pt-2">Esta es una demostración. No se almacenan datos reales.</p>
+        </form>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section>
+  </main><!-- FOOTER -->
+  <footer class="border-t border-white/10 bg-[#050816]">
+   <div class="max-w-6xl mx-auto px-4 py-6 grid grid-cols-1 md:grid-cols-3 gap-6 items-start text-xs text-slate-300"><!-- Términos legales -->
+    <div>
+     <h4 class="text-sm font-semibold mb-2">Términos legales</h4>
+     <p class="text-xs text-slate-400 leading-relaxed">Nexena es un concepto de plataforma educativa y colaborativa. Esta página es un prototipo visual sin recolección de datos reales ni almacenamiento de archivos.</p>
+    </div><!-- Equipo desarrollador -->
+    <div>
+     <h4 class="text-sm font-semibold mb-2">Equipo desarrollador</h4>
+     <p id="footerTeam" class="text-xs text-slate-300">ADSO 3002645</p>
+     <p class="mt-1 text-[0.7rem] text-slate-500">Diseñado como ejercicio de experiencia futurista para un planeta de blogs.</p>
+    </div><!-- Área para imagen futura -->
+    <div class="flex flex-col gap-2 items-start">
+     <h4 class="text-sm font-semibold">Espacio para imagen</h4>
+     <p class="text-[0.7rem] text-slate-400">Aquí podrás subir una imagen de tu equipo o logo oficial más adelante.</p>
+     <div class="w-full h-28 border-2 border-dashed border-slate-500/60 rounded-xl flex items-center justify-center text-[0.7rem] text-slate-500 bg-[#020617]/60">
+      Área reservada para imagen
+     </div>
+    </div>
+   </div>
+   <div class="border-t border-white/5 text-[0.65rem] text-center text-slate-500 py-3">
+    © <span id="yearSpan"></span> Nexena – Planeta de Blogs. Prototipo educativo.
+   </div>
+  </footer><!-- LÓGICA: menú móvil, formulario demo y Canva Element SDK -->
+  <script>
+    // Menú móvil
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    if (mobileMenuBtn && mobileMenu) {
+      mobileMenuBtn.addEventListener('click', () => {
+        const isHidden = mobileMenu.classList.contains('hidden');
+        if (isHidden) {
+          mobileMenu.classList.remove('hidden');
+        } else {
+          mobileMenu.classList.add('hidden');
+        }
+      });
+    }
+
+    // Botones de Acceso de Usuario - navegar a la sección
+    const accesoUsuarioBtn = document.getElementById('accesoUsuarioBtn');
+    const accesoUsuarioMobileBtn = document.getElementById('accesoUsuarioMobileBtn');
+
+    function irAAccesoUsuario(e) {
+      e.preventDefault();
+      // Cerrar menú móvil si está abierto
+      if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+        mobileMenu.classList.add('hidden');
+      }
+      // Navegar suavemente a la sección de acceso
+      const accesoSection = document.getElementById('acceso');
+      if (accesoSection) {
+        accesoSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    if (accesoUsuarioBtn) {
+      accesoUsuarioBtn.addEventListener('click', irAAccesoUsuario);
+    }
+
+    if (accesoUsuarioMobileBtn) {
+      accesoUsuarioMobileBtn.addEventListener('click', irAAccesoUsuario);
+    }
+
+    // Sistema de pestañas para login/registro
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const loginPanel = document.getElementById('loginPanel');
+    const registerPanel = document.getElementById('registerPanel');
+
+    tabButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const targetTab = button.getAttribute('data-tab');
+        
+        // Actualizar estilos de pestañas
+        tabButtons.forEach(btn => {
+          btn.classList.remove('border-indigo-500', 'text-indigo-300');
+          btn.classList.add('border-transparent', 'text-slate-400');
+        });
+        button.classList.remove('border-transparent', 'text-slate-400');
+        button.classList.add('border-indigo-500', 'text-indigo-300');
+
+        // Mostrar panel correspondiente
+        if (targetTab === 'login') {
+          loginPanel.classList.remove('hidden');
+          registerPanel.classList.add('hidden');
+        } else {
+          loginPanel.classList.add('hidden');
+          registerPanel.classList.remove('hidden');
+        }
+      });
+    });
+
+    // Toggle de visibilidad de contraseñas
+    const togglePasswordButtons = [
+      { btn: 'toggleLoginPassword', input: 'loginPassword' },
+      { btn: 'toggleRegisterPassword', input: 'registerPassword' },
+      { btn: 'toggleRegisterConfirmPassword', input: 'registerConfirmPassword' }
+    ];
+
+    togglePasswordButtons.forEach(({ btn, input }) => {
+      const button = document.getElementById(btn);
+      const inputField = document.getElementById(input);
+      
+      if (button && inputField) {
+        button.addEventListener('click', () => {
+          const type = inputField.getAttribute('type');
+          inputField.setAttribute('type', type === 'password' ? 'text' : 'password');
+        });
+      }
+    });
+
+    // Manejo del formulario de inicio de sesión
+    const loginForm = document.getElementById('loginForm');
+    const loginBtn = document.getElementById('loginBtn');
+    const loginText = document.getElementById('loginText');
+    const loginIcon = document.getElementById('loginIcon');
+    const loginSpinner = document.getElementById('loginSpinner');
+    const authStatus = document.getElementById('authStatus');
+
+    if (loginForm) {
+      loginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        if (!loginBtn || !authStatus || !loginText || !loginSpinner || !loginIcon) return;
+
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
+
+        // Estado "cargando"
+        loginBtn.disabled = true;
+        loginText.textContent = 'Iniciando sesión...';
+        loginIcon.classList.add('hidden');
+        loginSpinner.classList.remove('hidden');
+
+        authStatus.classList.remove('hidden');
+        authStatus.textContent = 'Verificando credenciales...';
+        authStatus.className = 'mb-6 text-sm rounded-lg border px-4 py-3 max-w-2xl mx-auto border-indigo-400/60 bg-indigo-500/10 text-indigo-100';
+
+        // Simular autenticación
+        setTimeout(() => {
+          authStatus.textContent = `¡Bienvenido de nuevo! Has iniciado sesión como ${email} (modo demostración - no se almacenan datos reales)`;
+          authStatus.className = 'mb-6 text-sm rounded-lg border px-4 py-3 max-w-2xl mx-auto border-emerald-400/60 bg-emerald-500/10 text-emerald-100';
+
+          loginBtn.disabled = false;
+          loginText.textContent = 'Iniciar Sesión';
+          loginSpinner.classList.add('hidden');
+          loginIcon.classList.remove('hidden');
+
+          loginForm.reset();
+        }, 1500);
+      });
+    }
+
+    // Manejo del formulario de registro
+    const registerForm = document.getElementById('registerForm');
+    const registerBtn = document.getElementById('registerBtn');
+    const registerText = document.getElementById('registerText');
+    const registerIcon = document.getElementById('registerIcon');
+    const registerSpinner = document.getElementById('registerSpinner');
+
+    if (registerForm) {
+      registerForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        if (!registerBtn || !authStatus || !registerText || !registerSpinner || !registerIcon) return;
+
+        const name = document.getElementById('registerName').value;
+        const username = document.getElementById('registerUsername').value;
+        const email = document.getElementById('registerEmail').value;
+        const password = document.getElementById('registerPassword').value;
+        const confirmPassword = document.getElementById('registerConfirmPassword').value;
+        const role = document.getElementById('registerRole').value;
+
+        // Validar que las contraseñas coincidan
+        if (password !== confirmPassword) {
+          authStatus.classList.remove('hidden');
+          authStatus.textContent = 'Las contraseñas no coinciden. Por favor, verifica e intenta nuevamente.';
+          authStatus.className = 'mb-6 text-sm rounded-lg border px-4 py-3 max-w-2xl mx-auto border-red-400/60 bg-red-500/10 text-red-100';
+          return;
+        }
+
+        // Estado "cargando"
+        registerBtn.disabled = true;
+        registerText.textContent = 'Creando cuenta...';
+        registerIcon.classList.add('hidden');
+        registerSpinner.classList.remove('hidden');
+
+        authStatus.classList.remove('hidden');
+        authStatus.textContent = 'Registrando tu cuenta en Nexena...';
+        authStatus.className = 'mb-6 text-sm rounded-lg border px-4 py-3 max-w-2xl mx-auto border-indigo-400/60 bg-indigo-500/10 text-indigo-100';
+
+        // Simular registro
+        setTimeout(() => {
+          authStatus.textContent = `¡Cuenta creada exitosamente! Bienvenido a Nexena, ${name} (@${username}). Tu perfil como ${role} está listo (modo demostración - no se almacenan datos reales)`;
+          authStatus.className = 'mb-6 text-sm rounded-lg border px-4 py-3 max-w-2xl mx-auto border-emerald-400/60 bg-emerald-500/10 text-emerald-100';
+
+          registerBtn.disabled = false;
+          registerText.textContent = 'Crear Cuenta';
+          registerSpinner.classList.add('hidden');
+          registerIcon.classList.remove('hidden');
+
+          registerForm.reset();
+
+          // Opcional: cambiar a pestaña de login después de 2 segundos
+          setTimeout(() => {
+            document.getElementById('tabLogin').click();
+          }, 2000);
+        }, 1800);
+      });
+    }
+
+    // Año dinámico en el footer
+    const yearSpan = document.getElementById('yearSpan');
+    if (yearSpan) {
+      yearSpan.textContent = new Date().getFullYear().toString();
+    }
+
+    // Simulación de envío de formulario (sin backend, solo UX)
+    const projectForm = document.getElementById('projectForm');
+    const formStatus = document.getElementById('formStatus');
+    const submitBtn = document.getElementById('submitBtn');
+    const submitText = document.getElementById('submitText');
+    const submitIcon = document.getElementById('submitIcon');
+    const submitSpinner = document.getElementById('submitSpinner');
+
+    if (projectForm) {
+      projectForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        if (!submitBtn || !formStatus || !submitText || !submitSpinner || !submitIcon) return;
+
+        // Estado "cargando"
+        submitBtn.disabled = true;
+        submitText.textContent = 'Publicando...';
+        submitIcon.classList.add('hidden');
+        submitSpinner.classList.remove('hidden');
+
+        formStatus.classList.remove('hidden');
+        formStatus.textContent = 'Procesando tu proyecto...';
+        formStatus.className =
+          'mb-4 text-sm rounded-lg border px-3 py-2 border-indigo-400/60 bg-indigo-500/10 text-indigo-100';
+
+        // Simular espera
+        setTimeout(() => {
+          // Estado "éxito"
+          formStatus.textContent =
+            'Proyecto enviado (modo demostración). Tus datos no se han guardado en ningún servidor.';
+          formStatus.className =
+            'mb-4 text-sm rounded-lg border px-3 py-2 border-emerald-400/60 bg-emerald-500/10 text-emerald-100';
+
+          submitBtn.disabled = false;
+          submitText.textContent = 'Publicar';
+          submitSpinner.classList.add('hidden');
+          submitIcon.classList.remove('hidden');
+
+          // Opcional: limpiar campos (menos archivos)
+          projectForm.reset();
+        }, 1500);
+      });
+    }
+
+    // Canva Element SDK: configuración editable
+    (async function initElementSdk() {
+      if (!window.elementSdk) return;
+
+      const defaultConfig = {
+        hero_title: 'Bienvenido a Nexena – Planeta de Blogs',
+        hero_description:
+          'Nexena es un planeta digital donde aprendices y desarrolladores pueden publicar proyectos, compartir ideas, escribir entradas tipo blog y subir recursos como enlaces de GitHub, archivos .txt, documentos .docx y hojas de Excel. Es un espacio colaborativo para estudiantes del SENA y creadores de contenido.',
+        footer_team: 'ADSO 3002645',
+        background_color: '#050816',
+        surface_color: '#111827',
+        text_color: '#e5e7eb',
+        primary_action_color: '#6366f1',
+        secondary_action_color: '#a855f7',
+        font_family: 'system-ui',
+        font_size: 16
+      };
+
+      async function onConfigChange(config) {
+        const cfg = Object.assign({}, defaultConfig, config || {});
+
+        // Colores
+        const bgColor = cfg.background_color;
+        const surfaceColor = cfg.surface_color;
+        const textColor = cfg.text_color;
+        const primaryColor = cfg.primary_action_color;
+        const secondaryColor = cfg.secondary_action_color;
+
+        // Fuente base
+        const baseFont = cfg.font_family || defaultConfig.font_family;
+        const baseSize = cfg.font_size || defaultConfig.font_size;
+        const fontStack = baseFont + ', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+
+        // Aplicar colores base y fuente al body
+        document.body.style.backgroundColor = bgColor;
+        document.body.style.color = textColor;
+        document.body.style.fontFamily = fontStack;
+        document.body.style.fontSize = baseSize + 'px';
+
+        // Ajuste de tamaños relativos de texto
+        const heroTitleEl = document.getElementById('heroTitle');
+        const heroDescEl = document.getElementById('heroDescription');
+        const logoTextEl = document.getElementById('logoText');
+        const footerTeamEl = document.getElementById('footerTeam');
+
+        if (heroTitleEl) {
+          heroTitleEl.textContent = cfg.hero_title || defaultConfig.hero_title;
+          heroTitleEl.style.fontFamily = fontStack;
+          heroTitleEl.style.fontSize = baseSize * 1.8 + 'px';
+        }
+        if (heroDescEl) {
+          heroDescEl.textContent = cfg.hero_description || defaultConfig.hero_description;
+          heroDescEl.style.fontFamily = fontStack;
+          heroDescEl.style.fontSize = baseSize * 0.95 + 'px';
+        }
+        if (logoTextEl) {
+          logoTextEl.style.fontFamily = fontStack;
+          logoTextEl.style.fontSize = baseSize * 1.1 + 'px';
+        }
+        if (footerTeamEl) {
+          footerTeamEl.textContent = cfg.footer_team || defaultConfig.footer_team;
+          footerTeamEl.style.fontFamily = fontStack;
+          footerTeamEl.style.fontSize = baseSize * 0.8 + 'px';
+        }
+
+        // Botón principal "Comenzar a publicar"
+        const ctaButtons = document.querySelectorAll('a[href="#subir"]');
+        ctaButtons.forEach((btn, index) => {
+          if (!(btn instanceof HTMLElement)) return;
+          if (index === 0) {
+            // Botón principal
+            btn.style.backgroundImage = `linear-gradient(to right, ${primaryColor}, ${secondaryColor})`;
+            btn.style.borderColor = 'transparent';
+          } else {
+            // Botón secundario
+            btn.style.backgroundColor = 'transparent';
+            btn.style.borderColor = secondaryColor;
+          }
+          btn.style.fontFamily = fontStack;
+          btn.style.fontSize = baseSize * 0.85 + 'px';
+        });
+
+        // Encabezados secundarios
+        document.querySelectorAll('h3, h4').forEach((el) => {
+          if (!(el instanceof HTMLElement)) return;
+          el.style.fontFamily = fontStack;
+          el.style.color = textColor;
+          if (el.tagName.toLowerCase() === 'h3') {
+            el.style.fontSize = baseSize * 1.3 + 'px';
+          } else {
+            el.style.fontSize = baseSize + 'px';
+          }
+        });
+
+        // Texto normal
+        document.querySelectorAll('p, li, label, input, textarea, button, a, span, summary').forEach((el) => {
+          if (!(el instanceof HTMLElement)) return;
+          el.style.fontFamily = fontStack;
+        });
+
+        // Superficies principales (tarjetas)
+        document.querySelectorAll('.card-surface').forEach((el) => {
+          if (!(el instanceof HTMLElement)) return;
+          el.style.backgroundColor = surfaceColor;
+        });
+      }
+
+      function mapToCapabilities(config) {
+        const cfg = Object.assign({}, defaultConfig, config || {});
+
+        // Recolorables: background, surface, text, primary, secondary
+        const recolorables = [
+          {
+            get: () => cfg.background_color || defaultConfig.background_color,
+            set: (value) => {
+              cfg.background_color = value;
+              window.elementSdk.setConfig({ background_color: value });
+            }
+          },
+          {
+            get: () => cfg.surface_color || defaultConfig.surface_color,
+            set: (value) => {
+              cfg.surface_color = value;
+              window.elementSdk.setConfig({ surface_color: value });
+            }
+          },
+          {
+            get: () => cfg.text_color || defaultConfig.text_color,
+            set: (value) => {
+              cfg.text_color = value;
+              window.elementSdk.setConfig({ text_color: value });
+            }
+          },
+          {
+            get: () => cfg.primary_action_color || defaultConfig.primary_action_color,
+            set: (value) => {
+              cfg.primary_action_color = value;
+              window.elementSdk.setConfig({ primary_action_color: value });
+            }
+          },
+          {
+            get: () => cfg.secondary_action_color || defaultConfig.secondary_action_color,
+            set: (value) => {
+              cfg.secondary_action_color = value;
+              window.elementSdk.setConfig({ secondary_action_color: value });
+            }
+          }
+        ];
+
+        const fontEditable = {
+          get: () => cfg.font_family || defaultConfig.font_family,
+          set: (value) => {
+            cfg.font_family = value;
+            window.elementSdk.setConfig({ font_family: value });
+          }
+        };
+
+        const fontSizeable = {
+          get: () => cfg.font_size || defaultConfig.font_size,
+          set: (value) => {
+            cfg.font_size = value;
+            window.elementSdk.setConfig({ font_size: value });
+          }
+        };
+
+        return {
+          recolorables,
+          borderables: [],
+          fontEditable,
+          fontSizeable
+        };
+      }
+
+      function mapToEditPanelValues(config) {
+        const cfg = Object.assign({}, defaultConfig, config || {});
+        return new Map([
+          ['hero_title', cfg.hero_title || defaultConfig.hero_title],
+          ['hero_description', cfg.hero_description || defaultConfig.hero_description],
+          ['footer_team', cfg.footer_team || defaultConfig.footer_team]
+        ]);
+      }
+
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities,
+        mapToEditPanelValues
+      });
+    })();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a4c06d59145f7b4',t:'MTc2NDE4NzgwMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
