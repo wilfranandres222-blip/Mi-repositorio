@@ -1,0 +1,14 @@
+{% extends 'core/base.html' %}
+{% block title %}Subir Proyecto{% endblock %}
+{% block content %}
+<div class="max-w-3xl mx-auto px-4 py-10">
+  <h2 class="text-2xl font-semibold mb-4">Sube tu proyecto</h2>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <label class="block text-sm font-medium mb-1">Archivos (.txt, .docx, .xlsx)</label>
+    <input type="file" name="files" multiple accept=".txt,.docx,.xlsx" class="block w-full" />
+    <button type="submit" class="mt-4 px-4 py-2 rounded bg-indigo-500">Publicar</button>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Nexena - {% block title %}{% endblock %}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-full bg-[#050816] text-white flex flex-col">
+  <header class="w-full border-b border-white/5 bg-gradient-to-r from-[#050816] via-[#0b1024] to-[#1a0b3a]/80">
+    <nav class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <div class="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-500 to-fuchsia-500 flex items-center justify-center shadow-lg"><span class="text-xs font-semibold tracking-widest">NX</span></div>
+        <a href="{% url 'core:index' %}" class="text-xl font-semibold tracking-[0.25em] uppercase">Nexena</a>
+      </div>
+      <div class="flex items-center gap-4">
+        <a href="{% url 'core:upload_project' %}" class="px-3 py-1 rounded-full border bg-indigo-500/10 text-sm">Subir Proyecto</a>
+        {% if user.is_authenticated %}
+          <a href="{% url 'core:my_projects' %}" class="text-sm">Mis Proyectos</a>
+          <a href="{% url 'core:logout' %}" class="text-sm">Cerrar Sesión</a>
+        {% else %}
+          <a href="{% url 'core:login' %}" class="text-sm">Iniciar sesión</a>
+          <a href="{% url 'core:register' %}" class="text-sm">Registrarse</a>
+        {% endif %}
+      </div>
+    </nav>
+  </header>
+
+  <main class="flex-1">
+    {% if messages %}
+      <div class="max-w-6xl mx-auto px-4 py-4">
+        {% for message in messages %}
+          <div class="mb-2 p-3 rounded {{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="border-t border-white/10 bg-[#050816]">
+    <div class="max-w-6xl mx-auto px-4 py-6 text-xs text-slate-300">
+      © {{ now|date:"Y" }} Nexena – Prototipo educativo.
+    </div>
+  </footer>
+</body>
+</html>

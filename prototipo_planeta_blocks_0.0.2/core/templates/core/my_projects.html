@@ -1,0 +1,24 @@
+{% extends 'core/base.html' %}
+{% block title %}Mis proyectos{% endblock %}
+{% block content %}
+<div class="max-w-5xl mx-auto px-4 py-10">
+  <h2 class="text-2xl font-semibold mb-4">Mis proyectos</h2>
+
+  {% if projects %}
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {% for p in projects %}
+        <div class="border rounded-lg p-4 bg-white/5">
+          <a href="{% url 'core:project_detail' p.pk %}" class="text-lg font-semibold">{{ p.title }}</a>
+          <div class="text-xs text-slate-400 mt-1">Creado: {{ p.created_at|date:"SHORT_DATE_FORMAT" }}</div>
+          <p class="mt-2 text-slate-300 text-sm">{{ p.description|truncatechars:160 }}</p>
+          <div class="mt-3 flex gap-2">
+            <a href="{% url 'core:project_detail' p.pk %}" class="px-3 py-1 rounded bg-indigo-500/80 text-sm">Ver</a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="text-slate-400">Aún no tienes proyectos. <a href="{% url 'core:upload_project' %}" class="text-indigo-300 underline">Sube tu primero</a>.</p>
+  {% endif %}
+</div>
+{% endblock %}

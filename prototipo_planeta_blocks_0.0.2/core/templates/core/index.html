@@ -1,0 +1,161 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block title %}Inicio{% endblock %}
+
+{% block content %}
+
+<!-- ===================== -->
+<!-- HERO / PORTADA -->
+<!-- ===================== -->
+
+<section class="w-full min-h-screen bg-[#050816] py-20">
+  <div class="max-w-7xl mx-auto px-6 text-center">
+
+    <!-- Logo + Título -->
+    <h1 class="text-5xl font-extrabold text-white tracking-widest drop-shadow-lg">
+      NEXENA
+    </h1>
+
+    <p class="text-slate-300 mt-4 max-w-2xl mx-auto">
+      El planeta digital donde los aprendices comparten ideas, suben proyectos,
+      reciben retroalimentación y se conectan con la comunidad de desarrollo.
+    </p>
+
+    <div class="mt-10 flex justify-center gap-5">
+
+      <!-- Botón dinámico según login -->
+      {% if user.is_authenticated %}
+        <a href="{% url 'core:upload_project' %}"
+           class="px-6 py-3 bg-indigo-600 hover:bg-indigo-500 rounded-lg text-white font-medium shadow-lg">
+          Subir Proyecto
+        </a>
+
+        <a href="{% url 'core:my_projects' %}"
+           class="px-6 py-3 bg-white/10 hover:bg-white/20 rounded-lg text-white font-medium">
+          Mis Proyectos
+        </a>
+
+      {% else %}
+        <a href="{% url 'core:login' %}"
+           class="px-6 py-3 bg-indigo-600 hover:bg-indigo-500 rounded-lg text-white font-medium shadow-lg">
+          Iniciar sesión
+        </a>
+
+        <a href="{% url 'core:register' %}"
+           class="px-6 py-3 bg-white/10 hover:bg-white/20 rounded-lg text-white font-medium">
+          Crear cuenta
+        </a>
+      {% endif %}
+
+    </div>
+  </div>
+</section>
+
+
+
+
+<!-- ===================== -->
+<!-- PROYECTOS DINÁMICOS -->
+<!-- ===================== -->
+
+<section class="w-full bg-[#0a0f2b] py-24">
+  <div class="max-w-7xl mx-auto px-6">
+
+    <h2 class="text-4xl font-bold text-white mb-10">Proyectos recientes</h2>
+
+    {% if projects %}
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+        {% for p in projects %}
+        <div class="bg-white/5 border border-white/10 rounded-lg p-6 hover:bg-white/10 transition">
+          <h3 class="text-xl font-semibold text-white">{{ p.title }}</h3>
+          <p class="text-slate-300 text-sm mt-2">{{ p.description|truncatechars:160 }}</p>
+
+          <div class="text-xs text-slate-400 mt-3">
+            Publicado por: <strong>{{ p.author.username }}</strong><br>
+            Fecha: {{ p.created_at|date:"d/m/Y H:i" }}
+          </div>
+
+          <div class="mt-4 flex gap-3">
+            <a href="{% url 'core:project_detail' p.pk %}"
+               class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 rounded text-white text-sm">
+               Ver proyecto
+            </a>
+
+            {% if p.github_url %}
+            <a href="{{ p.github_url }}" target="_blank"
+               class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded text-white text-sm">
+               GitHub
+            </a>
+            {% endif %}
+          </div>
+        </div>
+        {% endfor %}
+
+      </div>
+    {% else %}
+      <p class="text-slate-300 text-lg">Todavía no hay proyectos publicados.</p>
+    {% endif %}
+
+  </div>
+</section>
+
+
+
+
+<!-- ===================== -->
+<!-- SECCIÓN EDUCACIONAL / SOBRE NEXENA (del HTML original) -->
+<!-- ===================== -->
+
+<section class="py-24 bg-[#050816]">
+  <div class="max-w-6xl mx-auto px-6 text-center">
+    <h2 class="text-4xl font-bold text-white drop-shadow-xl">
+      Explora el universo del desarrollo
+    </h2>
+    <p class="text-slate-400 mt-4 max-w-3xl mx-auto">
+      Un espacio creado para aprendices, desarrolladores, creadores y soñadores
+      que buscan aprender, practicar y mostrar sus habilidades.
+    </p>
+  </div>
+</section>
+
+
+
+
+<!-- ===================== -->
+<!-- CTA FINAL -->
+<!-- ===================== -->
+
+<section class="w-full py-24 bg-[#0f1639]">
+  <div class="max-w-7xl mx-auto px-6 text-center">
+
+    <h3 class="text-3xl text-white font-bold">¿Listo para unirte al planeta digital?</h3>
+
+    <p class="text-slate-300 mt-3">
+      Regístrate, sube tus proyectos, comparte con la comunidad y mejora tus habilidades.
+    </p>
+
+    <div class="mt-8">
+
+      {% if user.is_authenticated %}
+        <a href="{% url 'core:upload_project' %}"
+           class="px-6 py-3 bg-indigo-600 hover:bg-indigo-500 rounded-lg text-white font-medium shadow-lg">
+           Subir proyecto ahora
+        </a>
+      {% else %}
+        <a href="{% url 'core:register' %}"
+           class="px-6 py-3 bg-indigo-600 hover:bg-indigo-500 rounded-lg text-white font-medium shadow-lg">
+           Crear cuenta
+        </a>
+      {% endif %}
+
+    </div>
+
+  </div>
+</section>
+
+
+
+
+{% endblock %}
