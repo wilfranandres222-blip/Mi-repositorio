@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuperar Contraseña</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+</head>
+
+<body class="auth-body">
+
+    <div class="auth-container">
+        <div class="auth-box">
+            <h1>🔐 Recuperar Contraseña</h1>
+            <p class="subtitle">Restablece tu contraseña de acceso</p>
+
+            {% if error %}
+            <div class="alert alert-error">{{ error }}</div>
+            {% endif %}
+
+            <form id="recuperarForm" class="auth-form" method="POST">
+                <div class="form-group">
+                    <label for="usuario">Nombre de usuario</label>
+                    <input type="text" id="usuario" name="usuario" placeholder="Tu nombre de usuario" required autocomplete="username">
+                </div>
+
+                <div class="form-group">
+                    <label for="documento">Documento de identidad</label>
+                    <input type="text" id="documento" name="documento" placeholder="Tu número de documento" required autocomplete="off">
+                </div>
+
+                <div class="form-group">
+                    <label for="correo">Correo electrónico</label>
+                    <input type="email" id="correo" name="correo" placeholder="Tu correo electrónico" required autocomplete="email">
+                </div>
+
+                <div class="form-group">
+                    <label for="nueva_clave">Nueva Contraseña</label>
+                    <input type="password" id="nueva_clave" name="nueva_clave" placeholder="Crea una nueva contraseña" required minlength="6" autocomplete="new-password">
+                    <small class="form-hint">Mínimo 6 caracteres</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmar_clave">Confirmar Contraseña</label>
+                    <input type="password" id="confirmar_clave" name="confirmar_clave" placeholder="Repite tu nueva contraseña" required minlength="6" autocomplete="new-password">
+                </div>
+
+                <button type="submit" class="auth-btn btn-primary">Recuperar Acceso</button>
+            </form>
+
+            <div class="auth-links">
+                <p>
+                    <a href="{{ url_for('login') }}" class="link-primary">Volver a iniciar sesión</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+    <script>
+        document.getElementById('recuperarForm').addEventListener('submit', async(e) => {
+            e.preventDefault();
+            const usuario = document.getElementById('usuario').value;
+            const documento = document.getElementById('documento').value;
+            const correo = document.getElementById('correo').value;
+            const nueva_clave = document.getElementById('nueva_clave').value;
+            const confirmar_clave = document.getElementById('confirmar_clave').value;
+
+            if (nueva_clave !== confirmar_clave) {
+                showAlert('Las contraseñas no coinciden', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch('{{ url_for("recuperar_contraseña") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        usuario,
+                        documento,
+                        correo,
+                        nueva_clave,
+                        confirmar_clave
+                    })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    showAlert('✅ ' + data.mensaje, 'success');
+                    setTimeout(() => {
+                        window.location.href = '{{ url_for("login") }}';
+                    }, 2000);
+                } else {
+                    showAlert(data.mensaje, 'error');
+                }
+            } catch (error) {
+                showAlert('Error al procesar la solicitud', 'error');
+                console.error('Error:', error);
+            }
+        });
+
+        function showAlert(message, type) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.textContent = message;
+            document.querySelector('.auth-form').parentElement.insertBefore(alertDiv, document.querySelector('.auth-form'));
+            setTimeout(() => alertDiv.remove(), 5000);
+        }
+    </script>
+</body>
+
+</html>

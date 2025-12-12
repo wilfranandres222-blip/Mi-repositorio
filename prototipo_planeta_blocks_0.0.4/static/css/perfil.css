@@ -1,0 +1,296 @@
+/* ====================================================================
+   ESTILOS PERFIL
+   ==================================================================== */
+
+.profile-container {
+    min-height: calc(100vh - 80px);
+    background: linear-gradient(135deg, #050816 0%, #0f0f1e 50%, #1a0a2e 100%);
+    padding: 2rem;
+}
+
+.profile-wrapper {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.profile-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.profile-header h1 {
+    font-size: 2.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.profile-section {
+    background: linear-gradient(135deg, rgba(79, 70, 229, 0.1) 0%, rgba(168, 85, 247, 0.1) 100%);
+    border: 1px solid rgba(79, 70, 229, 0.3);
+    border-radius: 15px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.profile-section h2 {
+    font-size: 1.3rem;
+    margin-bottom: 1.5rem;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.profile-section h2::before {
+    content: '';
+    width: 4px;
+    height: 24px;
+    background: linear-gradient(135deg, #4f46e5 0%, #a855f7 50%, #ec4899 100%);
+    border-radius: 2px;
+}
+
+.profile-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.profile-info-item {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1rem;
+    border-radius: 10px;
+    border: 1px solid rgba(79, 70, 229, 0.2);
+}
+
+.profile-info-label {
+    display: block;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.profile-info-value {
+    display: block;
+    color: white;
+    font-weight: 500;
+    word-break: break-all;
+}
+
+.edit-button {
+    width: 100%;
+    padding: 0.8rem;
+    background: rgba(79, 70, 229, 0.2);
+    border: 1px solid rgba(79, 70, 229, 0.3);
+    color: #4f46e5;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+}
+
+.edit-button:hover {
+    background: rgba(79, 70, 229, 0.3);
+    border-color: rgba(79, 70, 229, 0.5);
+}
+
+.form-section {
+    display: none;
+}
+
+.form-section.active {
+    display: block;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 500;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.85rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(79, 70, 229, 0.3);
+    border-radius: 8px;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.form-group input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #4f46e5;
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+}
+
+.form-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+}
+
+.btn-save {
+    padding: 0.8rem 2rem;
+    background: linear-gradient(135deg, #4f46e5 0%, #a855f7 50%, #ec4899 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-save:hover {
+    box-shadow: 0 0 20px rgba(79, 70, 229, 0.4);
+    transform: translateY(-2px);
+}
+
+.btn-cancel {
+    padding: 0.8rem 2rem;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: rgba(255, 255, 255, 0.7);
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-cancel:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.danger-zone {
+    border: 1px solid rgba(236, 72, 153, 0.3);
+    background: linear-gradient(135deg, rgba(236, 72, 153, 0.05) 0%, rgba(236, 72, 153, 0.1) 100%);
+}
+
+.danger-zone h2 {
+    color: #fca5c0;
+}
+
+.danger-zone h2::before {
+    background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
+}
+
+.danger-description {
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+}
+
+.btn-delete {
+    width: 100%;
+    padding: 1rem;
+    background: #ec4899;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-delete:hover {
+    background: #f472b6;
+    box-shadow: 0 0 20px rgba(236, 72, 153, 0.4);
+}
+
+.confirmation-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    backdrop-filter: blur(5px);
+}
+
+.confirmation-modal.show {
+    display: flex;
+}
+
+.confirmation-content {
+    background: var(--color-darker);
+    border: 1px solid rgba(236, 72, 153, 0.3);
+    border-radius: 15px;
+    padding: 2rem;
+    max-width: 400px;
+    text-align: center;
+}
+
+.confirmation-content h3 {
+    color: #fca5c0;
+    margin-bottom: 1rem;
+}
+
+.confirmation-content p {
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 1.5rem;
+}
+
+.confirmation-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.confirmation-buttons button {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-confirm {
+    background: #ec4899;
+    color: white;
+}
+
+.btn-confirm:hover {
+    background: #f472b6;
+}
+
+.btn-cancel-confirm {
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn-cancel-confirm:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+@media (max-width: 600px) {
+    .profile-container {
+        padding: 1rem;
+    }
+    .profile-info {
+        grid-template-columns: 1fr;
+    }
+    .form-buttons {
+        flex-direction: column;
+    }
+    .confirmation-content {
+        width: 90%;
+    }
+}

@@ -1,0 +1,279 @@
+/* Estilos generales */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #e9f3ff;
+  font-family: 'Segoe UI', sans-serif;
+  color: #022b59;
+}
+
+/* TOPBAR */
+.topbar {
+  background: #0d47a1;
+  color: #fff;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-weight: bold;
+  font-size: 1.5rem;
+  letter-spacing: 2px;
+}
+
+.navbar a {
+  color: #fff;
+  margin-left: 25px;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.btn-login {
+  background: #9bc9ff;
+  padding: 7px 18px;
+  border-radius: 8px;
+}
+
+/* LAYOUT */
+.container {
+  display: flex;
+  padding: 20px;
+  gap: 20px;
+}
+
+/* SIDEBAR */
+.sidebar {
+  width: 230px;
+  background: #cfe4ff;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,50,0.1);
+}
+
+.sidebar h3 {
+  margin-bottom: 10px;
+  color: #003975;
+}
+
+.sidebar ul {
+  list-style: none;
+  margin-bottom: 20px;
+}
+
+.sidebar li {
+  margin: 8px 0;
+}
+
+.sidebar a {
+  text-decoration: none;
+  color: #034b9a;
+  font-weight: 500;
+}
+
+/* CONTENT */
+.content {
+  flex: 1;
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 0 12px rgba(0,0,20,0.1);
+}
+
+.heading {
+  font-size: 1.8rem;
+  margin-bottom: 5px;
+}
+
+.subheading {
+  color: #406a92;
+  margin-bottom: 20px;
+}
+
+/* GRID POSTS */
+.posts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill,minmax(280px,1fr));
+  gap: 20px;
+}
+
+.post-card {
+  background: #f7fbff;
+  border-radius: 12px;
+  padding: 0;
+  box-shadow: 0 4px 12px rgba(0,0,50,0.1);
+  overflow: hidden;
+}
+
+.thumb-placeholder {
+  height: 150px;
+  background: #b4d8ff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 48px;
+}
+
+.post-body {
+  padding: 15px;
+}
+
+.post-title {
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+}
+
+.meta {
+  font-size: 0.8rem;
+  color: #3d6389;
+  margin-bottom: 12px;
+}
+
+.excerpt {
+  margin-bottom: 15px;
+  color: #033a73;
+}
+
+.btn-read {
+  background: #0d47a1;
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 6px;
+  text-decoration: none;
+}
+
+/* FOOTER */
+.footer {
+  text-align: center;
+  padding: 20px;
+  margin-top: auto;   /* ← CORREGIDO */
+  background: #0d47a1;
+  color: white;
+}
+
+/* LOGIN Y REGISTRO */
+.auth-body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: #d8eaff;
+}
+
+.auth-container {
+  background: white;
+  padding: 25px;
+  width: 350px;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0,0,40,0.1);
+  text-align: center;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.auth-form input {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #a2c5ff;
+}
+
+.auth-btn {
+  margin-top: 10px;
+  background: #0d47a1;
+  color: white;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
+}
+
+.auth-container a {
+  color: #0d47a1;
+}
+
+/* FIX PARA FOOTER PEGADO */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+
+
+
+
+/* SECCIONES */
+.section {
+  width: 100%;
+  background: #ffffff;
+  padding: 50px;
+  border-radius: 15px;
+  margin-bottom: 40px;
+  box-shadow: 0 0 15px rgba(0,0,40,0.1);
+}
+
+/* SECCIÓN 1 — Welcome */
+.welcome-section {
+  text-align: center;
+}
+
+.welcome-section .welcome-img {
+  width: 320px;
+  margin-top: 20px;
+}
+
+/* SECCIÓN 2 — Sobre el proyecto */
+.about-section .about-list {
+  margin-top: 15px;
+}
+
+.about-list li {
+  padding: 5px 0;
+  font-size: 1.1rem;
+}
+
+/* SECCIÓN 3 — Formulario */
+.portal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.portal-form input,
+.portal-form select,
+.portal-form textarea {
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #94bfff;
+}
+
+.portal-form textarea {
+  height: 120px;
+  resize: none;
+}
+
+.btn-submit {
+  background: #0d47a1;
+  padding: 12px;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+  border: none;
+  margin-top: 10px;
+  font-size: 1rem;
+}

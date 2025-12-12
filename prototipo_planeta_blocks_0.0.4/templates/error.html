@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error {{ codigo }} · Los Papaspitufos</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/error.css') }}">
+</head>
+
+<body class="error-body">
+
+    <div class="error-container">
+        <div class="error-content">
+            <h1 class="error-code">{{ codigo }}</h1>
+            <h2 class="error-message">{{ mensaje }}</h2>
+            <p class="error-description">
+                {% if codigo == 404 %} Parece que la página que buscas no existe o fue movida. {% elif codigo == 500 %} Algo salió mal en nuestro servidor. Estamos trabajando para solucionarlo. {% else %} Ha ocurrido un error. Por favor, intenta de nuevo más tarde. {%
+                endif %}
+            </p>
+            <div class="error-actions">
+                <a href="{{ url_for('index') }}" class="btn btn-primary">Volver al Inicio</a> {% if codigo == 404 %}
+                <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Ir al Dashboard</a> {% endif %}
+            </div>
+        </div>
+        <div class="error-graphic">
+            {% if codigo == 404 %}
+            <div class="error-icon">🔍</div>
+            {% elif codigo == 500 %}
+            <div class="error-icon">⚠️</div>
+            {% else %}
+            <div class="error-icon">❌</div>
+            {% endif %}
+        </div>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXENA - Perfil de {{ usuario[2] }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #050816;
+            color: white;
+        }
+        
+        .topbar {
+            background: linear-gradient(180deg, rgba(10, 10, 26, 0.95) 0%, rgba(15, 15, 30, 0.95) 100%);
+            border-bottom: 1px solid rgba(79, 70, 229, 0.2);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #4f46e5 0%, #a855f7 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .logo a {
+            color: white;
+            font-size: 1.3rem;
+            font-weight: bold;
+            letter-spacing: 0.1em;
+            text-decoration: none;
+        }
+        
+        .navbar {
+            display: flex;
+            gap: 3rem;
+            align-items: center;
+        }
+        
+        .navbar a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .navbar a:hover {
+            color: #4f46e5;
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+        
+        .btn-volver {
+            padding: 0.5rem 1.5rem;
+            background: linear-gradient(135deg, #4f46e5 0%, #a855f7 100%);
+            border-radius: 50px;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn-volver:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(79, 70, 229, 0.4);
+        }
+        
+        .container {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .perfil-header {
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.1) 0%, rgba(168, 85, 247, 0.1) 100%);
+            border: 1px solid rgba(79, 70, 229, 0.3);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .foto-usuario {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #4f46e5 0%, #a855f7 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            margin: 0 auto 1rem;
+            border: 3px solid rgba(79, 70, 229, 0.5);
+        }
+        
+        .perfil-header h1 {
+            margin: 0 0 0.5rem 0;
+            background: linear-gradient(135deg, #4f46e5 0%, #a855f7 50%, #ec4899 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .usuario-id {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            padding: 0.5rem 1rem;
+            background: rgba(79, 70, 229, 0.1);
+            border-left: 3px solid #4f46e5;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            display: inline-block;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .info-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 10px;
+            border: 1px solid rgba(79, 70, 229, 0.2);
+        }
+        
+        .info-item label {
+            display: block;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.85rem;
+            margin-bottom: 0.3rem;
+            font-weight: 600;
+        }
+        
+        .info-item p {
+            margin: 0;
+            color: white;
+            word-break: break-all;
+        }
+        
+        .seccion {
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.05) 0%, rgba(168, 85, 247, 0.05) 100%);
+            border: 1px solid rgba(79, 70, 229, 0.3);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .seccion h2 {
+            margin: 0 0 1rem 0;
+            color: white;
+            border-bottom: 2px solid rgba(79, 70, 229, 0.3);
+            padding-bottom: 0.5rem;
+        }
+        
+        .blogs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .blog-card {
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.1) 0%, rgba(168, 85, 247, 0.1) 100%);
+            border: 1px solid rgba(79, 70, 229, 0.3);
+            border-radius: 15px;
+            padding: 1.5rem;
+            transition: all 0.3s;
+        }
+        
+        .blog-card:hover {
+            border-color: rgba(79, 70, 229, 0.6);
+            box-shadow: 0 0 20px rgba(79, 70, 229, 0.2);
+        }
+        
+        .blog-card h3 {
+            margin: 0 0 0.5rem 0;
+            color: white;
+        }
+        
+        .blog-card p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+            margin: 0 0 1rem 0;
+        }
+        
+        .blog-meta {
+            display: flex;
+            justify-content: space-between;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.85rem;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        @media (max-width: 768px) {
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            .navbar {
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header/Navigation -->
+    <header class="topbar">
+        <div class="logo">
+            <div class="logo-icon">NX</div>
+            <a href="{{ url_for('index') }}">NEXENA</a>
+        </div>
+        <nav class="navbar">
+            <a href="{{ url_for('index') }}">Inicio</a> {% if session.usuario_id %}
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            <div class="user-menu">
+                <span>{{ session.usuario_nombre }}</span>
+                <a href="{{ url_for('logout') }}" class="btn-volver">Salir</a>
+            </div>
+            {% else %}
+            <a href="{{ url_for('login') }}" class="btn-volver">Iniciar Sesión</a> {% endif %}
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Perfil Header -->
+        <div class="perfil-header">
+            <div class="foto-usuario">👤</div>
+            <h1>{{ usuario[2] }}</h1>
+            <div class="usuario-id">ID: {{ usuario[1] }}</div>
+            <div class="info-grid">
+                <div class="info-item">
+                    <label>Correo Electrónico</label>
+                    <p>{{ usuario[4] if usuario[4] else 'No registrado' }}</p>
+                </div>
+                <div class="info-item">
+                    <label>Miembro desde</label>
+                    <p>NEXENA</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección Blogs -->
+        <div class="seccion">
+            <h2>📚 Blogs de {{ usuario[2] }}</h2>
+            {% if blogs %}
+            <div class="blogs-grid">
+                {% for blog in blogs %}
+                <div class="blog-card">
+                    <h3>{{ blog[1] }}</h3>
+                    <p>{{ blog[2][:100] }}{% if blog[2]|length > 100 %}...{% endif %}</p>
+                    <div class="blog-meta">
+                        <span>{% if blog[3] %}{{ blog[3] }}{% else %}Sin categoría{% endif %}</span>
+                        <span>{{ blog[4] }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <p>📝 Este usuario no tiene blogs aún</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+
+</html>

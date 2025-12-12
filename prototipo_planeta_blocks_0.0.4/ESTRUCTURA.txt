@@ -1,0 +1,269 @@
+prototipo_planeta_blocks_0.0.3/
+│
+├── 📄 ARCHIVOS RAÍZ
+│   ├── run.py .............................. 🚀 Ejecutar la aplicación
+│   ├── requirements.txt .................... 📦 Dependencias
+│   ├── .gitignore .......................... 🔒 Control de versiones
+│   │
+│   └── 📚 DOCUMENTACIÓN
+│       ├── README.md ....................... 📖 Guía completa
+│       ├── QUICK_START.md .................. ⚡ Inicio rápido
+│       ├── CAMBIOS.md ...................... 📝 Cambios realizados
+│       ├── TROUBLESHOOTING.md .............. 🔧 Solución de problemas
+│       ├── INDICE.md ....................... 📑 Índice de archivos
+│       ├── INSTALACION.txt ................. ⚙️ Instalación
+│       └── RESUMEN_FINAL.md ................ 🎉 Resumen del proyecto
+│
+├── 📂 app/ ................................ 🐍 CÓDIGO PYTHON
+│   ├── __init__.py ......................... Flask + Rutas (312 líneas)
+│   │   ├── Rutas de autenticación
+│   │   ├── Rutas de usuario
+│   │   ├── API endpoints
+│   │   ├── Manejo de errores
+│   │   └── Decoradores de seguridad
+│   │
+│   └── database.py ......................... Base de datos (256 líneas)
+│       ├── Conexión SQLite
+│       ├── CRUD de usuarios
+│       ├── Validaciones
+│       └── Autenticación
+│
+├── 📂 templates/ ........................... 🌐 ARCHIVOS HTML
+│   ├── index.html .......................... Página de inicio (151 líneas)
+│   │   ├── Hero section
+│   │   ├── Características
+│   │   ├── CTA
+│   │   └── Footer
+│   │
+│   ├── login.html .......................... Formulario de login (101 líneas)
+│   │   ├── Email/Usuario
+│   │   ├── Contraseña
+│   │   └── Links
+│   │
+│   ├── register.html ....................... Registro (152 líneas)
+│   │   ├── Nombre de usuario
+│   │   ├── Documento
+│   │   ├── Correo
+│   │   └── Contraseña (confirmación)
+│   │
+│   ├── recuperar_contraseña.html .......... Recuperación (103 líneas)
+│   │   ├── Datos personales
+│   │   ├── Nueva contraseña
+│   │   └── Confirmación
+│   │
+│   ├── dashboard.html ..................... Dashboard (160 líneas)
+│   │   ├── Navegación
+│   │   ├── Sidebar
+│   │   ├── Bienvenida
+│   │   ├── Grid de blogs
+│   │   └── Modal para crear
+│   │
+│   ├── perfil.html ........................ Perfil de usuario (163 líneas)
+│   │   ├── Información personal
+│   │   ├── Cambio de contraseña
+│   │   ├── Zona de peligro
+│   │   └── Modal de eliminación
+│   │
+│   └── error.html ......................... Página de error (41 líneas)
+│       ├── Código de error
+│       ├── Mensaje
+│       └── Acciones
+│
+├── 📂 static/ .............................. 🎨 RECURSOS ESTÁTICOS
+│   │
+│   ├── css/ ............................... ESTILOS CSS
+│   │   ├── styles.css ..................... Estilos globales (406 líneas)
+│   │   │   ├── Variables CSS
+│   │   │   ├── Tipografía
+│   │   │   ├── Navbar
+│   │   │   ├── Botones
+│   │   │   ├── Formularios
+│   │   │   ├── Alertas
+│   │   │   ├── Modals
+│   │   │   └── Responsive
+│   │   │
+│   │   ├── auth.css ....................... Autenticación (160 líneas)
+│   │   │   ├── Auth container
+│   │   │   ├── Formularios
+│   │   │   ├── Validación visual
+│   │   │   └── Animaciones
+│   │   │
+│   │   ├── dashboard.css .................. Dashboard (223 líneas)
+│   │   │   ├── Sidebar
+│   │   │   ├── Main content
+│   │   │   ├── Blog cards
+│   │   │   ├── User menu
+│   │   │   └── Modals
+│   │   │
+│   │   ├── perfil.css ..................... Perfil (167 líneas)
+│   │   │   ├── Info fields
+│   │   │   ├── Formularios
+│   │   │   ├── Zona peligro
+│   │   │   └── Modals
+│   │   │
+│   │   ├── index.css ...................... Página inicio (304 líneas)
+│   │   │   ├── Hero
+│   │   │   ├── Características
+│   │   │   ├── CTA
+│   │   │   ├── Footer
+│   │   │   └── Animaciones
+│   │   │
+│   │   └── error.css ...................... Error (139 líneas)
+│   │       ├── Container
+│   │       ├── Error icon
+│   │       └── Actions
+│   │
+│   └── js/ ................................ SCRIPTS JAVASCRIPT
+│       ├── main.js ........................ Página inicio (88 líneas)
+│       │   ├── Smooth scrolling
+│       │   ├── Scroll animations
+│       │   └── Form validation
+│       │
+│       ├── auth.js ........................ Autenticación (200 líneas)
+│       │   ├── Real-time validation
+│       │   ├── Dynamic errors
+│       │   ├── Visual feedback
+│       │   └── HTML escaping
+│       │
+│       ├── dashboard.js .................. Dashboard (150 líneas)
+│       │   ├── Blog loading
+│       │   ├── Blog creation
+│       │   ├── Notifications
+│       │   └── Event listeners
+│       │
+│       └── perfil.js ..................... Perfil (130 líneas)
+│           ├── Password change
+│           ├── Account deletion
+│           ├── Confirmations
+│           └── Validation
+│
+└── 📂 database/ ............................ 💾 BASE DE DATOS
+    └── prototipo.db ....................... SQLite (creado automáticamente)
+        ├── Tabla usuarios
+        │   ├── id (PK)
+        │   ├── nombre
+        │   ├── documento (UNIQUE)
+        │   ├── correo (UNIQUE)
+        │   ├── clave
+        │   └── fecha_registro
+        │
+        └── Índices para búsquedas rápidas
+
+═══════════════════════════════════════════════════════════════════════
+
+📊 ESTADÍSTICAS
+
+Total Archivos: 25+
+├─ Python: 2 (568 líneas)
+├─ HTML: 7 (971 líneas)
+├─ CSS: 6 (1,399 líneas)
+├─ JavaScript: 4 (568 líneas)
+├─ Documentación: 7 (archivos)
+└─ Configuración: 2 (archivos)
+
+Líneas de Código: ~3,500+
+Funciones Python: 30+
+Rutas disponibles: 13+
+API endpoints: 6+
+
+═══════════════════════════════════════════════════════════════════════
+
+🎯 ESTRUCTURA LÓGICA
+
+Usuario Anónimo
+│
+├─→ / (index.html)
+│   ├─→ Registrarse → /register
+│   ├─→ Iniciar sesión → /login
+│   └─→ Recuperar contraseña → /recuperar-contraseña
+│
+Usuario Autenticado
+│
+├─→ /dashboard
+│   ├─→ Crear blog
+│   ├─→ Ver blogs
+│   └─→ Ir a perfil
+│
+└─→ /perfil
+    ├─→ Ver información
+    ├─→ Cambiar contraseña
+    └─→ Eliminar cuenta
+
+═══════════════════════════════════════════════════════════════════════
+
+🔑 CARACTERÍSTICAS POR CARPETA
+
+app/
+├─ Autenticación completa
+├─ Gestión de usuarios
+├─ Base de datos SQLite
+├─ API REST endpoints
+├─ Manejo de errores
+└─ Sesiones seguras
+
+templates/
+├─ 7 páginas HTML
+├─ Integración Jinja2
+├─ Formularios dinámicos
+├─ Validación en cliente
+└─ SEO básico
+
+static/css/
+├─ Variables CSS
+├─ Sistema de diseño
+├─ Responsive design
+├─ Animaciones
+└─ Accesibilidad
+
+static/js/
+├─ Validación en tiempo real
+├─ Interactividad
+├─ Manejo de errores
+├─ API calls
+└─ DOM manipulation
+
+═══════════════════════════════════════════════════════════════════════
+
+✨ PUNTOS DESTACADOS
+
+✓ Integración completa Python + HTML
+✓ Base de datos automática
+✓ Validación en múltiples capas
+✓ Diseño moderno y responsivo
+✓ Documentación exhaustiva
+✓ Fácil de modificar
+✓ Listo para producción (con mejoras)
+✓ Sin dependencias externas (JavaScript)
+
+═══════════════════════════════════════════════════════════════════════
+
+📖 CÓMO NAVEGAR EL PROYECTO
+
+1. Comienza aquí:
+   └─ README.md (visión general)
+   └─ QUICK_START.md (3 pasos para empezar)
+
+2. Para entender la estructura:
+   └─ INDICE.md (descripción de archivos)
+   └─ Este archivo (árbol visual)
+
+3. Para solucionar problemas:
+   └─ TROUBLESHOOTING.md (errores comunes)
+
+4. Para ver cambios realizados:
+   └─ CAMBIOS.md (qué se hizo)
+   └─ RESUMEN_FINAL.md (resumen completo)
+
+═══════════════════════════════════════════════════════════════════════
+
+🚀 EJECUCIÓN
+
+1. pip install -r requirements.txt
+2. python run.py
+3. Abre http://127.0.0.1:5000
+
+═══════════════════════════════════════════════════════════════════════
+
+Versión: 0.0.3
+Estado: ✅ Completo y Funcional
+Última actualización: Diciembre 2025

@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Planeta de Blocs</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div id="app">
+    <h1>Planeta de Blocs</h1>
+    <div id="planet-info">
+      <p>Cargando información del planeta...</p>
+    </div>
+  </div>
+
+  <script>
+    fetch('/api/planet')
+      .then(r => r.json())
+      .then(data => {
+        const el = document.getElementById('planet-info');
+        el.innerHTML = `
+          <div class="card" style="background:${data.color}">
+            <h2>${data.name}</h2>
+            <p>${data.description}</p>
+            <ul>
+              <li><strong>Composición:</strong> ${data.composition}</li>
+              <li><strong>Temperatura:</strong> ${data.temperature}</li>
+              <li><strong>Rotación:</strong> ${data.rotation}</li>
+            </ul>
+          </div>
+        `;
+      })
+      .catch(err => {
+        document.getElementById('planet-info').innerText = 'Error al cargar datos.';
+      });
+  </script>
+</body>
+</html>

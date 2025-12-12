@@ -1,0 +1,5 @@
+/* Prototipo mínimo: tú puedes reemplazar con tu CSS */
+body { font-family: Arial, Helvetica, sans-serif; background:#f7f7f9; color:#222; padding:24px; }
+h1 { margin-bottom:16px; }
+.card { border-radius:12px; padding:16px; box-shadow:0 8px 20px rgba(0,0,0,0.08); max-width:640px; }
+#planet-info p { margin:0; }

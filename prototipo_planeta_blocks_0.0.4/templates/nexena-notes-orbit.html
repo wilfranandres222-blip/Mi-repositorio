@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexena - Vista de Notas Orbital</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes twinkle {
+            0%,
+            100% {
+                opacity: 0.2;
+            }
+            50% {
+                opacity: 0.8;
+            }
+        }
+        
+        @keyframes spin-slow {
+            from {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+            to {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
+        }
+        
+        @keyframes spin-slower {
+            from {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+            to {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
+        }
+        
+        @keyframes spin-slowest {
+            from {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+            to {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        @keyframes zoomIn {
+            from {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        
+        .animate-spin-slow {
+            animation: spin-slow 30s linear infinite;
+        }
+        
+        .animate-spin-slower {
+            animation: spin-slower 40s linear infinite;
+        }
+        
+        .animate-spin-slowest {
+            animation: spin-slowest 50s linear infinite;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.2s ease-out;
+        }
+        
+        .zoom-in {
+            animation: zoomIn 0.3s ease-out;
+        }
+        
+        .star {
+            animation: twinkle 2s infinite;
+        }
+        
+        .note-card {
+            transition: all 0.3s ease;
+        }
+        
+        .note-card:hover {
+            transform: scale(1.1);
+        }
+        .note-title { font-size: 0.9rem; font-weight: 600; }
+        .note-badge { font-size: 10px; padding: 3px 8px; border-radius: 999px; text-transform: uppercase; font-weight: 700; letter-spacing: 0.06em; }
+        .note-sub { font-size: 0.78rem; color: rgba(255,255,255,0.65); }
+        .list-card { border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.04); }
+        .list-card-header { padding: 8px 12px; display:flex; align-items:center; gap:12px }
+        .note-avatar { width: 36px; height: 36px; border-radius: 8px; display:inline-flex; align-items:center; justify-content:center; }
+        .note-card-date { font-size: 12px; color: rgba(255,255,255,0.65); }
+        .note-title { font-size: 0.95rem; font-weight: 700; }
+        /* Planet center styling */
+        .planet-outer {
+          width: 224px; height: 224px; border-radius: 50%; display:flex; align-items:center; justify-content:center; position:relative;
+          box-shadow: 0 40px 80px rgba(99,102,241,0.12);
+        }
+        .planet-inner {
+          width: 180px; height: 180px; border-radius: 50%; display:flex; align-items:center; justify-content:center; flex-direction:column; position:relative;
+          backdrop-filter: blur(6px);
+          border: 1px solid rgba(255,255,255,0.03);
+        }
+        .planet-label { font-size: 12px; letter-spacing: 0.25em; }
+        .planet-name { font-size: 32px; font-weight: 900; letter-spacing: 0.06em; }
+        .planet-count { font-size: 12px; color: rgba(255,255,255,0.75); }
+        .planet-glow { position:absolute; inset: -10px; z-index:0; filter: blur(30px); opacity:0.75; }
+        .note-actions {
+          transition: opacity 0.15s ease;
+          opacity: 0;
+        }
+        .note-card:hover .note-actions { opacity: 1; }
+        .note-action-btn {
+          width: 28px;
+          height: 28px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 9999px;
+          background: rgba(255,255,255,0.06);
+          backdrop-filter: blur(2px);
+          border: 1px solid rgba(255,255,255,0.06);
+        }
+        .new-note-highlight { box-shadow: 0 0 0 4px rgba(99,102,241,0.12), 0 4px 30px rgba(99,102,241,0.12); transform: scale(1.03); }
+        /* Toasts */
+        #toastContainer .toast { min-width: 200px; max-width: 380px; padding: 10px 12px; border-radius: 10px; box-shadow: 0 8px 30px rgba(0,0,0,0.6); }
+        #toastContainer .toast.info { background: linear-gradient(135deg,#0b1220,#111827); color: white; border: 1px solid rgba(255,255,255,0.06); }
+        #toastContainer .toast.success { background: linear-gradient(135deg,#064e3b,#065f46); color: white; }
+        #toastContainer .toast.error { background: linear-gradient(135deg,#5b0211,#7f1d1d); color: white; }
+    </style>
+</head>
+
+<body class="min-h-screen bg-[#050816] text-white overflow-hidden">
+
+    <!-- Header -->
+    <header class="relative z-20 border-b border-white/10 bg-[#050816]/80 backdrop-blur-sm">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-fuchsia-500 flex items-center justify-center">
+                    <span class="text-xs font-bold tracking-widest">NX</span>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold tracking-wide">NEXENA</h1>
+                    <p class="text-xs text-white/50">Vista de Notas y Proyectos</p>
+                </div>
+            </div>
+
+            <!-- Controles de vista -->
+            <div class="flex items-center gap-2">
+                <button id="orbitViewBtn" class="p-2 rounded-lg bg-indigo-500 text-white transition-all duration-200" title="Vista Orbital">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+            <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+            <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+            <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+          </svg>
+        </button>
+                <button id="listViewBtn" class="p-2 rounded-lg bg-white/5 text-white/50 hover:bg-white/10 hover:text-white transition-all duration-200" title="Vista Lista">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="8" y1="6" x2="21" y2="6"></line>
+            <line x1="8" y1="12" x2="21" y2="12"></line>
+            <line x1="8" y1="18" x2="21" y2="18"></line>
+            <line x1="3" y1="6" x2="3.01" y2="6"></line>
+            <line x1="3" y1="12" x2="3.01" y2="12"></line>
+            <line x1="3" y1="18" x2="3.01" y2="18"></line>
+          </svg>
+        </button>
+                <button id="newNoteBtn" class="ml-2 px-4 py-2 rounded-lg bg-gradient-to-r from-indigo-500 to-fuchsia-500 text-sm font-semibold hover:shadow-lg hover:shadow-indigo-500/40 transition-all duration-200 flex items-center gap-2">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          Nueva Nota
+        </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Vista Orbital -->
+    <main id="orbitView" class="relative" style="height: calc(100vh - 80px);">
+        <div class="relative w-full h-full flex items-center justify-center overflow-hidden">
+            <!-- Estrellas de fondo -->
+            <div id="stars" class="absolute inset-0"></div>
+
+            <!-- Órbitas -->
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                <div class="w-[500px] h-[500px] rounded-full border border-indigo-500/20 animate-spin-slow"></div>
+            </div>
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                <div class="w-[380px] h-[380px] rounded-full border border-fuchsia-500/20 animate-spin-slower"></div>
+            </div>
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                <div class="w-[260px] h-[260px] rounded-full border border-cyan-500/20 animate-spin-slowest"></div>
+            </div>
+
+            <!-- Planeta central -->
+            <div class="relative z-10">
+                <div class="planet-outer">
+                  <div class="planet-glow" style="background: radial-gradient(circle at 50% 40%, rgba(99,102,241,0.20), transparent 40%);"></div>
+                  <div class="planet-inner bg-gradient-to-br from-indigo-600 via-purple-600 to-fuchsia-600 shadow-2xl shadow-purple-500/50 flex items-center justify-center">
+                    <!-- Brillo del planeta -->
+                    <div class="absolute top-8 left-8 w-20 h-20 rounded-full bg-white/30 blur-xl"></div>
+
+                    <!-- Anillo del planeta -->
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <div class="w-64 h-16 rounded-full border-4 border-indigo-400/40 -rotate-12 bg-gradient-to-r from-transparent via-indigo-300/20 to-transparent"></div>
+                      </div>
+                    </div>
+
+                    <!-- Nombre del proyecto -->
+                    <div class="relative z-10 text-center">
+                        <div class="text-xs tracking-[0.3em] uppercase text-fuchsia-200/80 mb-1 planet-label">
+                            NEXENA
+                          </div>
+                        <h1 class="planet-name text-white">
+                            Planeta de Blocks
+                        </h1>
+                        <div id="noteCount" class="planet-count mt-1">
+                          0 notas activas
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notas orbitando -->
+            <div id="orbitNotes"></div>
+        </div>
+    </main>
+
+    <!-- Vista Lista -->
+    <main id="listView" class="hidden" style="height: calc(100vh - 80px); overflow-y: auto;">
+        <div class="w-full max-w-4xl mx-auto px-4 py-8">
+            <div id="listNotes" class="space-y-3"></div>
+        </div>
+    </main>
+
+    <!-- Modal de detalle -->
+    <div id="noteModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 fade-in">
+        <div class="relative w-full max-w-2xl zoom-in">
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <!-- Confirm modal (generic) -->
+    <div id="confirmModal" class="hidden fixed inset-0 bg-black/60 z-60 flex items-center justify-center p-4">
+      <div class="bg-[#0b1020] rounded-2xl p-6 w-full max-w-lg shadow-xl border border-white/5">
+        <div class="mb-3 text-lg font-semibold text-white" id="confirmTitle">Confirmar</div>
+        <div class="mb-6 text-white/80" id="confirmMessage">¿Estás seguro?</div>
+        <div class="flex gap-3 justify-end">
+          <button id="confirmCancelBtn" class="px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-white">Cancelar</button>
+          <button id="confirmOkBtn" class="px-4 py-2 rounded-lg bg-rose-600 hover:bg-rose-500 text-white">Eliminar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast container -->
+    <div id="toastContainer" class="fixed top-6 right-6 z-70 flex flex-col gap-2 items-end"></div>
+
+    <script>
+        // notas cargadas desde el servidor
+        let notes = [];
+        const serverCategoria = {{ categoria|tojson|default('null') }};
+        const serverBlogId = {{ blog_id|tojson|default('null') }};
+        const currentUserId = {{ current_user_id|tojson|default('null') }};
+
+        // Small SVG icons for action buttons
+        const svgRevert = `<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10a8 8 0 1 0-9 8"></path><polyline points="21 10 21 4 15 4"></polyline></svg>`;
+        const svgTrash = `<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path><path d="M10 11v6"></path><path d="M14 11v6"></path><path d="M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"></path></svg>`;
+
+        const positions = [{
+            top: '10%',
+            left: '15%'
+        }, {
+            top: '15%',
+            right: '10%'
+        }, {
+            bottom: '20%',
+            right: '15%'
+        }, {
+            bottom: '15%',
+            left: '10%'
+        }, {
+            top: '45%',
+            left: '5%'
+        }];
+
+        // Generar estrellas
+        const starsContainer = document.getElementById('stars');
+        for (let i = 0; i < 30; i++) {
+            const star = document.createElement('div');
+            star.className = 'absolute w-1 h-1 bg-white rounded-full opacity-40 star';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 2 + 's';
+            starsContainer.appendChild(star);
+        }
+
+        // Función para formatear fecha: acepta Date o string
+        function formatDate(date, format = 'short') {
+          let d = date;
+          if (!d) return '';
+          if (typeof d === 'string') {
+            // intentar parsear ISO o sql-like
+            const parsed = Date.parse(d.replace(' ', 'T'));
+            if (!isNaN(parsed)) d = new Date(parsed);
+            else d = new Date(d);
+          }
+          if (!(d instanceof Date)) d = new Date(d);
+          if (format === 'long') {
+            return d.toLocaleDateString('es-ES', {
+              day: 'numeric',
+              month: 'long',
+              year: 'numeric'
+            });
+          }
+          return d.toLocaleDateString('es-ES', {
+            day: 'numeric',
+            month: 'short',
+            year: 'numeric'
+          });
+        }
+
+        // Obtener notas del servidor
+        function parseServerDate(dateStr) {
+          if (!dateStr) return new Date();
+          // Replace space with 'T' for SQL-like string
+          try {
+            const iso = String(dateStr).replace(' ', 'T');
+            const p = Date.parse(iso);
+            if (!isNaN(p)) return new Date(p);
+            const fallback = new Date(dateStr);
+            if (!isNaN(fallback.getTime())) return fallback;
+          } catch (e) {}
+          return new Date();
+        }
+
+        async function fetchNotes(newlyCreatedId = null) {
+          try {
+            const res = await fetch('/api/notes');
+            if (!res.ok) throw new Error('Error al obtener notas');
+            const data = await res.json();
+            const serverNotes = data.notes || [];
+            notes = serverNotes.map(n => ({
+              ...n,
+              date: parseServerDate(n.date),
+              icon: n.icon || ''
+            }));
+            // Actualizar conteo y renderizar
+            const countEl = document.getElementById('noteCount');
+            if (countEl) {
+              const active = notes.filter(n => !n.completed).length;
+              updateNoteCount(active);
+            }
+            renderOrbitView();
+            renderListView();
+            if (newlyCreatedId) highlightNewNote(newlyCreatedId);
+          } catch (err) {
+            console.error('Error fetching notes:', err);
+            // Fallback: mantener lista vacía o mostrar un mensaje
+            notes = [];
+            updateNoteCount(0);
+            renderOrbitView();
+            renderListView();
+          }
+        }
+
+        // Función para toggle completado -> persistir en servidor
+        async function toggleComplete(id) {
+          const note = notes.find(n => n.id === id);
+          if (!note) return;
+          // Optimistic UI
+          const prev = note.completed;
+          note.completed = !prev;
+          renderOrbitView();
+          renderListView();
+          try {
+            const res = await fetch(`/api/notes/${id}/toggle`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ valor: note.completed ? 1 : 0 })
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.mensaje || 'Error al actualizar');
+            // refrescar desde servidor para asegurar consistencia
+            await fetchNotes();
+          } catch (err) {
+            console.error('Error toggling note:', err);
+            // rollback
+            note.completed = prev;
+            renderOrbitView();
+            renderListView();
+            alert('No se pudo cambiar el estado de la nota. ' + (err.message || ''));
+          }
+        }
+
+        // Construir el contenido HTML del modal para una nota. Si editing=true, muestra inputs.
+        function buildModalHtml(note, editing = false) {
+            const titleHtml = editing ? `<input id="modalTitle" class="w-full bg-transparent border border-white/10 rounded p-2 text-white" value="${htmlEscape(note.title)}">` : `<h2 class="text-2xl font-bold text-white">${note.title}</h2>`;
+            const contentHtml = editing ? `<textarea id="modalContentTextarea" class="w-full bg-transparent border border-white/10 rounded p-2 text-white min-h-[120px]">${htmlEscape(note.content)}</textarea>` : `<p class="text-white/80 leading-relaxed">${note.content}</p>`;
+            const categoryHtml = editing ? `<input id="modalCategoria" class="bg-transparent border border-white/10 rounded p-2 text-white" value="${note.type || ''}">` : `<span class="text-xs uppercase tracking-wider text-white/50 block mb-1">${note.type}</span>`;
+            return `
+        <div class="rounded-3xl bg-gradient-to-br ${note.color} p-[2px] shadow-2xl">
+          <div class="rounded-3xl bg-[#0a0a1a] p-8">
+            <div class="flex items-start justify-between mb-6">
+              <div class="flex items-center gap-4">
+                <button onclick="event.stopPropagation(); handleToggleModalComplete(${note.id})" class="w-8 h-8 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all duration-200 ${note.completed ? 'bg-emerald-500 border-emerald-400' : 'bg-transparent border-white/30 hover:border-white/60'}">
+                  ${note.completed ? '<svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>' : ''}
+                </button>
+                <div class="p-3 rounded-xl bg-gradient-to-br ${note.color}">
+                  ${note.icon || defaultIcon(note.type)}
+                </div>
+                <div>
+                  ${categoryHtml}
+                  ${titleHtml}
+                </div>
+              </div>
+              <div class="flex items-center gap-3">
+                ${editing ? `<button onclick="saveNoteChanges(${note.id})" class="px-4 py-2 rounded-lg bg-gradient-to-r ${note.color} text-white text-sm font-semibold hover:shadow-lg transition-all duration-200">Guardar cambios</button>` : `<button onclick="toggleEdit(${note.id})" class="px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-white text-sm transition-colors duration-200">Editar</button>`}
+                <button onclick="closeModal()" class="p-2 rounded-full hover:bg-white/10 transition-colors duration-200">
+                  <svg class="w-6 h-6 text-white/70" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 text-sm text-white/50 mb-6 pb-6 border-b border-white/10">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+              </svg>
+              <span>Creado el ${formatDate(note.date, 'long')}</span>
+            </div>
+            <div class="prose prose-invert max-w-none">
+              ${contentHtml}
+            </div>
+            <div class="flex items-center justify-end gap-3 mt-8 pt-6 border-t border-white/10">
+              ${editing ? '' : '<button onclick="openEditInModal(' + note.id + ')" class="px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-white text-sm transition-colors duration-200">Abrir editor</button>'}
+            </div>
+          </div>
+        </div>
+      `;
+        }
+
+        // Escapa HTML para evitar XSS en valores del servidor
+        function htmlEscape(str) {
+            return String(str || '').replace(/[&<>"]/g, function (s) {
+                return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[s];
+            });
+        }
+
+        // Devuelve un icono por defecto según tipo
+        function defaultIcon(type) {
+            return `<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle></svg>`;
+        }
+
+        // Función para mostrar modal
+        function showNoteDetail(id, editing = false) {
+            const note = notes.find(n => n.id === id);
+            if (!note) return;
+
+            const modal = document.getElementById('noteModal');
+            const modalContent = document.getElementById('modalContent');
+            modalContent.innerHTML = buildModalHtml(note, editing);
+            modal.classList.remove('hidden');
+        }
+
+        // Función para cerrar modal
+        function closeModal() {
+            document.getElementById('noteModal').classList.add('hidden');
+        }
+
+        // Abre modal en modo edición
+        function toggleEdit(id) {
+          showNoteDetail(id, true);
+        }
+
+        // En el modal alterna el estado completado (cuando se hace click en el botón de la cabecera)
+        function handleToggleModalComplete(id) {
+          // Simplemente reutiliza toggleComplete
+          toggleComplete(id);
+          // refrescar modal con nuevo valor
+          showNoteDetail(id, true);
+        }
+
+        // Guardar cambios (actualiza blog en servidor usando endpoint existente)
+        async function saveNoteChanges(id) {
+          const titulo = (document.getElementById('modalTitle') || {}).value || '';
+          const contenido = (document.getElementById('modalContentTextarea') || {}).value || '';
+          const categoria = (document.getElementById('modalCategoria') || {}).value || '';
+          if (!titulo || !contenido) {
+            alert('Título y contenido requeridos.');
+            return;
+          }
+          try {
+            const res = await fetch('/actualizar_blog', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ blog_id: id, titulo, contenido, categoria })
+            });
+            const data = await res.json();
+            if (!res.ok || !data.success) throw new Error(data.mensaje || 'Fallo al guardar');
+            // Cerrar modal y refrescar notas
+            closeModal();
+            await fetchNotes();
+          } catch (err) {
+            console.error('Error saving:', err);
+            alert('No fue posible guardar la nota: ' + (err.message || ''));
+          }
+        }
+
+        // Confirm modal helpers
+        let _confirmAction = null;
+        function openConfirmModal(title, message, confirmLabel = 'OK', onConfirm) {
+          document.getElementById('confirmTitle').innerText = title;
+          document.getElementById('confirmMessage').innerText = message;
+          document.getElementById('confirmOkBtn').innerText = confirmLabel;
+          _confirmAction = onConfirm;
+          document.getElementById('confirmModal').classList.remove('hidden');
+        }
+        function closeConfirmModal() { document.getElementById('confirmModal').classList.add('hidden'); _confirmAction = null; }
+        document.getElementById('confirmCancelBtn').addEventListener('click', closeConfirmModal);
+        document.getElementById('confirmOkBtn').addEventListener('click', () => {
+          if (typeof _confirmAction === 'function') _confirmAction();
+          closeConfirmModal();
+        });
+
+        // Toast helper
+        function showToast(message, type = 'info', timeout = 3500) {
+          const container = document.getElementById('toastContainer');
+          if (!container) return;
+          const el = document.createElement('div');
+          el.className = `toast ${type} px-3 py-2 animate-fade-in`;
+          el.innerText = message;
+          container.appendChild(el);
+          setTimeout(() => {
+            try { el.classList.add('opacity-0'); el.remove(); } catch (e) {}
+          }, timeout);
+        }
+
+        // Eliminar nota -> usa confirm modal y muestra toast
+        async function deleteNote(id) {
+          openConfirmModal('Eliminar nota', '¿Eliminar la nota? Esta acción no se puede deshacer.', 'Eliminar', async () => {
+            try {
+              const res = await fetch(`/api/notes/${id}/delete`, { method: 'POST', headers: { 'Content-Type': 'application/json' } });
+              const data = await res.json();
+              if (!res.ok || !data.success) throw new Error(data.mensaje || 'Fallo al eliminar');
+              await fetchNotes();
+              showToast('Nota eliminada', 'success');
+            } catch (err) {
+              console.error('Error deleting note:', err);
+              showToast('No fue posible eliminar la nota: ' + (err.message || ''), 'error');
+            }
+          });
+        }
+
+        // Devolver nota (set completado = false)
+        async function revertNote(id) {
+          try {
+            const res = await fetch(`/api/notes/${id}/toggle`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ valor: 0 }) });
+            const data = await res.json();
+            if (!res.ok || !data.success) throw new Error(data.mensaje || 'Fallo al devolver');
+            await fetchNotes();
+            showToast('La nota volvió a activo', 'success');
+          } catch (err) {
+            console.error('Error reverting note:', err);
+            showToast('No fue posible devolver la nota: ' + (err.message || ''), 'error');
+          }
+        }
+
+        // Si se hace click en "Abrir editor" -> convertir modal en editable
+        function openEditInModal(id) {
+          showNoteDetail(id, true);
+        }
+
+        // Cerrar modal al hacer click fuera
+        document.getElementById('noteModal').addEventListener('click', (e) => {
+            if (e.target.id === 'noteModal') {
+                closeModal();
+            }
+        });
+
+        // Renderizar vista orbital
+        function renderOrbitView() {
+            const container = document.getElementById('orbitNotes');
+            container.innerHTML = notes.map((note, index) => {
+                const pos = positions[index % positions.length];
+                const posStyle = Object.entries(pos).map(([key, val]) => `${key}: ${val}`).join('; ');
+              const ownerOverlay = (note.usuario_id && currentUserId && String(note.usuario_id) === String(currentUserId)) ? '<div class="absolute top-2 left-2 note-actions">' +
+                          '<button onclick="event.stopPropagation(); revertNote(' + note.id + ')" class="note-action-btn" title="Devolver">' + svgRevert + '</button>' +
+                          '</div>' +
+                                        '<div class="absolute top-2 right-10 note-actions">' +
+                          '<button onclick="event.stopPropagation(); deleteNote(' + note.id + ')" class="note-action-btn" title="Eliminar">' + svgTrash + '</button>' +
+                          '</div>' : '';
+
+                        return `
+                      <div class="absolute cursor-pointer note-card" data-note-id="${note.id}" style="${posStyle}" onclick="showNoteDetail(${note.id})">
+            <div class="relative group ${note.completed ? 'opacity-40' : 'opacity-100'}">
+              <!-- Conexión al planeta -->
+              <div class="absolute top-1/2 left-1/2 w-1 h-32 bg-gradient-to-b from-transparent via-indigo-400/20 to-transparent transform -translate-x-1/2 -rotate-45 pointer-events-none"></div>
+              
+              <!-- Tarjeta de nota -->
+              <div class="relative w-40 h-32 rounded-2xl bg-gradient-to-br ${note.color} p-[2px] shadow-lg shadow-black/40 hover:shadow-xl hover:shadow-purple-500/40 transition-all duration-300">
+                <!-- Small top color strip -->
+                <div class="absolute top-0 left-0 right-0 h-2 rounded-t-2xl overflow-hidden">
+                  <div class="h-full bg-gradient-to-r ${note.color}"></div>
+                </div>
+                <!-- Overlay actions (top-left & top-right) -->
+                ${ownerOverlay}
+                <div class="w-full h-full rounded-2xl bg-[#0a0a1a] p-4 flex flex-col">
+                  <!-- Checkbox de completado -->
+                  <button onclick="event.stopPropagation(); toggleComplete(${note.id})" class="absolute -top-2 -right-2 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all duration-200 ${note.completed ? 'bg-emerald-500 border-emerald-400' : 'bg-[#0a0a1a] border-white/30 hover:border-white/60'}">
+                    ${note.completed ? '<svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>' : ''}
+                  </button>
+
+                  <!-- Ícono del tipo + badge -->
+                  <div class="flex items-center gap-3 mb-2">
+                    <div class="flex items-center justify-center w-9 h-9 rounded-lg" style="background: linear-gradient(135deg,rgba(255,255,255,0.02), transparent); border:1px solid rgba(255,255,255,0.03)">
+                      <div class="p-1.5 rounded-lg bg-gradient-to-br ${note.color}">
+                        ${note.icon || defaultIcon(note.type)}
+                      </div>
+                    </div>
+                    <div>
+                      <div class="note-badge bg-white/5 text-white/80 inline-block">${note.type}</div>
+                    </div>
+                  </div>
+
+                  <!-- Título -->
+                  <h3 class="note-title text-white mb-1 line-clamp-2">
+                    ${note.title}
+                  </h3>
+
+                  <!-- Preview del contenido -->
+                  <p class="note-sub line-clamp-2 flex-1">
+                    ${note.content}
+                  </p>
+
+                  <!-- Indicador de más contenido -->
+                  <div class="flex items-center justify-between mt-2">
+                    <span class="text-[10px] text-white/40">
+                      ${formatDate(note.date)}
+                    </span>
+                    <div class="text-[10px] text-indigo-400 group-hover:text-indigo-300 flex items-center gap-2">
+                          ${note.usuario_id && currentUserId && String(note.usuario_id) === String(currentUserId) ? '<div class="cursor-pointer" onclick="event.stopPropagation(); revertNote(' + note.id + ')" title="Devolver a activo">' + svgRevert + '</div>' : ''}
+                            ${note.usuario_id && currentUserId && String(note.usuario_id) === String(currentUserId) ? '<div class="cursor-pointer" onclick="event.stopPropagation(); revertNote(' + note.id + ')" title="Devolver a activo">' + svgRevert + '</div>' : ''}
+                            ${note.usuario_id && currentUserId && String(note.usuario_id) === String(currentUserId) ? '<div class="cursor-pointer" onclick="event.stopPropagation(); deleteNote(' + note.id + ')" title="Eliminar nota">' + svgTrash + '</div>' : ''}
+                          <div class="ml-1">Ver más →</div>
+                        </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+            }).join('');
+        }
+
+        // Renderizar vista lista
+        function renderListView() {
+            const sortedNotes = [...notes].sort((a, b) => b.date - a.date);
+            const container = document.getElementById('listNotes');
+
+            container.innerHTML = sortedNotes.map(note => `
+            <div data-note-id="${note.id}" class="group relative cursor-pointer ${note.completed ? 'opacity-40' : 'opacity-100'} transition-all duration-300" onclick="showNoteDetail(${note.id})">
+          <div class="rounded-xl bg-gradient-to-r ${note.color} p-[1px] hover:shadow-lg hover:shadow-purple-500/30 transition-all duration-300">
+                <div class="rounded-xl bg-[#0a0a1a] p-0 flex items-start gap-0">
+                  <div class="list-card-header bg-gradient-to-r ${note.color}">
+                    <div class="note-avatar" style="background: linear-gradient(135deg, rgba(255,255,255,0.03), transparent); border: 1px solid rgba(255,255,255,0.04);">
+                      <div class="p-2 rounded-lg bg-gradient-to-br ${note.color}">${note.icon || defaultIcon(note.type)}</div>
+                    </div>
+                    <div style="flex:1">
+                      <div class="note-title text-white">${note.title}</div>
+                      <div class="note-card-date text-white/70">${note.usuario_nombre || ''} • ${formatDate(note.date)}</div>
+                    </div>
+                    <div style="min-width: 120px; text-align:right; padding-left:8px;">
+                      ${note.usuario_id && currentUserId && String(note.usuario_id) === String(currentUserId) ? '<button onclick="event.stopPropagation(); deleteNote(' + note.id + ')" class="text-xs px-2 py-1 bg-rose-600 rounded">Eliminar</button>' : ''}
+                        ${note.usuario_id && currentUserId && String(note.usuario_id) === String(currentUserId) ? '<button onclick="event.stopPropagation(); deleteNote(' + note.id + ')" class="text-xs px-2 py-1 bg-rose-600 rounded">Eliminar</button>' : ''}
+                    </div>
+                  </div>
+                  <div class="rounded-xl bg-[#0a0a1a] p-4 flex items-start gap-4">
+              <!-- Checkbox -->
+              <button onclick="event.stopPropagation(); toggleComplete(${note.id})" class="mt-1 w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all duration-200 ${note.completed ? 'bg-emerald-500 border-emerald-400' : 'bg-transparent border-white/30 hover:border-white/60'}">
+                ${note.completed ? '<svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>' : ''}
+              </button>
+
+              <!-- Contenido -->
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-3 mb-2">
+                  <div class="p-2 rounded-lg bg-gradient-to-br ${note.color}">
+                    ${note.icon}
+                  </div>
+                  <div class="flex-1">
+                    <!-- Title shown in header; keep small spacing here -->
+                    <div style="height:0; overflow:hidden;">&nbsp;</div>
+                    <div class="flex items-center gap-3 text-xs text-white/50">
+                      <span class="flex items-center gap-1">
+                        <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                          <line x1="16" y1="2" x2="16" y2="6"></line>
+                          <line x1="8" y1="2" x2="8" y2="6"></line>
+                          <line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
+                        ${formatDate(note.date)}
+                      </span>
+                      <span class="uppercase tracking-wider">
+                        ${note.type}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <p class="text-sm text-white/70 line-clamp-2">
+                  ${note.content}
+                </p>
+              </div>
+
+              <!-- Indicador de expandir / acciones -->
+                <div class="flex gap-2 items-center text-indigo-400 group-hover:text-indigo-300 flex-shrink-0">
+                ${note.usuario_id && currentUserId && String(note.usuario_id) === String(currentUserId) ? '<button onclick="event.stopPropagation(); revertNote(' + note.id + ')" class="text-xs px-2 py-1 bg-white/5 rounded">Devolver</button>' : ''}
+                  ${note.usuario_id && currentUserId && String(note.usuario_id) === String(currentUserId) ? '<button onclick="event.stopPropagation(); deleteNote(' + note.id + ')" class="text-xs px-2 py-1 bg-rose-600 rounded">Eliminar</button>' : ''}
+                <div><span class="text-xs">Ver más →</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+        }
+
+        // Cambiar entre vistas
+        document.getElementById('orbitViewBtn').addEventListener('click', () => {
+            document.getElementById('orbitView').classList.remove('hidden');
+            document.getElementById('listView').classList.add('hidden');
+            document.getElementById('orbitViewBtn').className = 'p-2 rounded-lg bg-indigo-500 text-white transition-all duration-200';
+            document.getElementById('listViewBtn').className = 'p-2 rounded-lg bg-white/5 text-white/50 hover:bg-white/10 hover:text-white transition-all duration-200';
+        });
+
+        document.getElementById('listViewBtn').addEventListener('click', () => {
+            document.getElementById('orbitView').classList.add('hidden');
+            document.getElementById('listView').classList.remove('hidden');
+            document.getElementById('listViewBtn').className = 'p-2 rounded-lg bg-indigo-500 text-white transition-all duration-200';
+            document.getElementById('orbitViewBtn').className = 'p-2 rounded-lg bg-white/5 text-white/50 hover:bg-white/10 hover:text-white transition-all duration-200';
+        });
+
+        // Inicializar vistas (desde servidor)
+        fetchNotes();
+
+        // Nueva nota -> abrir modal vacío
+        document.getElementById('newNoteBtn').addEventListener('click', () => {
+            const modal = document.getElementById('noteModal');
+            const modalContent = document.getElementById('modalContent');
+            const dummy = { id: 'nuevo', title: '', content: '', type: '', completed: false, date: new Date(), color: 'from-indigo-500 to-blue-500', icon: '' };
+            modalContent.innerHTML = `
+        <div class="rounded-3xl bg-gradient-to-br ${dummy.color} p-[2px] shadow-2xl">
+          <div class="rounded-3xl bg-[#0a0a1a] p-8">
+            <div class="flex items-start justify-between mb-6">
+              <div class="flex items-center gap-4">
+                <div class="p-3 rounded-xl bg-gradient-to-br ${dummy.color}">
+                  ${dummy.icon}
+                </div>
+                <div>
+                  <input id="modalTitle" class="w-full bg-transparent border border-white/10 rounded p-2 text-white" value="">
+                </div>
+              </div>
+              <div class="flex items-center gap-3">
+                <button onclick="createNoteFromModal()" class="px-4 py-2 rounded-lg bg-gradient-to-r ${dummy.color} text-white text-sm font-semibold hover:shadow-lg transition-all duration-200">Crear nota</button>
+                <button onclick="closeModal()" class="p-2 rounded-full hover:bg-white/10 transition-colors duration-200">Cerrar</button>
+              </div>
+            </div>
+            <div class="mb-4">
+              <input id="modalCategoria" class="w-full bg-transparent border border-white/10 rounded p-2 text-white" placeholder="Categoría">
+            </div>
+            <div class="prose prose-invert max-w-none">
+              <textarea id="modalContentTextarea" class="w-full bg-transparent border border-white/10 rounded p-2 text-white min-h-[120px]"></textarea>
+            </div>
+          </div>
+        </div>
+      `;
+            modal.classList.remove('hidden');
+        });
+
+        async function createNoteFromModal() {
+            const titulo = (document.getElementById('modalTitle') || {}).value || '';
+            const contenido = (document.getElementById('modalContentTextarea') || {}).value || '';
+            const categoria = (document.getElementById('modalCategoria') || {}).value || '';
+            if (!titulo || !contenido) {
+                alert('Título y contenido requeridos.');
+                return;
+            }
+            try {
+                const res = await fetch('/api/notes', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ titulo, contenido, categoria })
+                });
+                const data = await res.json();
+                if (!res.ok || !data.success) throw new Error(data.mensaje || 'Fallo al crear nota');
+                closeModal();
+                // highlight the new note after it appears
+                await fetchNotes(data.id);
+            } catch (err) {
+                console.error('Error creating note:', err);
+                alert('No fue posible crear la nota: ' + (err.message || ''));
+            }
+        }
+
+          function updateNoteCount(count) {
+            const el = document.getElementById('noteCount');
+            if (!el) return;
+            const label = count === 1 ? 'nota activa' : 'notas activas';
+            el.innerText = `${count} ${label}`;
+          }
+
+          // Añadir un efecto destacado para la nota nueva recién creada
+          function highlightNewNote(id) {
+            try {
+              const orbitEl = document.querySelector(`[data-note-id='${id}']`);
+              const listEl = document.querySelector(`#listNotes [data-note-id='${id}']`);
+              if (orbitEl) {
+                orbitEl.classList.add('new-note-highlight');
+                setTimeout(() => orbitEl.classList.remove('new-note-highlight'), 3500);
+              }
+              if (listEl) {
+                listEl.classList.add('new-note-highlight');
+                setTimeout(() => listEl.classList.remove('new-note-highlight'), 3500);
+              }
+            } catch (e) { /* no-op */ }
+          }
+    </script>
+</body>
+
+</html>

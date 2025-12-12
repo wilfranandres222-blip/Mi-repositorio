@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+</head>
+
+<body class="auth-body">
+
+    <div class="auth-container">
+        <div class="auth-box">
+            <h1>👤 Iniciar Sesión</h1>
+            <p class="subtitle">Accede a tu cuenta</p>
+
+            {% if error %}
+            <div class="alert alert-error">{{ error }}</div>
+            {% endif %} {% if exito %}
+            <div class="alert alert-success">{{ exito }}</div>
+            {% endif %}
+
+            <form id="loginForm" class="auth-form" method="POST">
+                <div class="form-group">
+                    <label for="usuario">Nombre de usuario</label>
+                    <input type="text" id="usuario" name="usuario" placeholder="Tu nombre de usuario" required autocomplete="username">
+                </div>
+
+                <div class="form-group">
+                    <label for="documento">Documento de identidad</label>
+                    <input type="text" id="documento" name="documento" placeholder="Tu número de documento" required autocomplete="off">
+                </div>
+
+                <div class="form-group">
+                    <label for="clave">Contraseña</label>
+                    <input type="password" id="clave" name="clave" placeholder="Tu contraseña" required autocomplete="current-password">
+                </div>
+
+                <button type="submit" class="auth-btn btn-primary">Entrar</button>
+            </form>
+
+            <div class="auth-links">
+                <p>
+                    <a href="{{ url_for('recuperar_contraseña') }}" class="link-secondary">¿Olvidaste tu contraseña?</a>
+                </p>
+                <p>
+                    ¿No tienes cuenta?
+                    <a href="{{ url_for('register') }}" class="link-primary">Crear cuenta</a>
+                </p>
+            </div>
+
+            <div class="info-box">
+                <p><strong>Demo:</strong> Usa credenciales de prueba para acceder</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async(e) => {
+            e.preventDefault();
+            const usuario = document.getElementById('usuario').value;
+            const documento = document.getElementById('documento').value;
+            const clave = document.getElementById('clave').value;
+
+            try {
+                const response = await fetch('{{ url_for("login") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        usuario,
+                        documento,
+                        clave
+                    })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    window.location.href = '{{ url_for("dashboard") }}';
+                } else {
+                    showAlert(data.mensaje, 'error');
+                }
+            } catch (error) {
+                showAlert('Error al procesar la solicitud', 'error');
+                console.error('Error:', error);
+            }
+        });
+
+        function showAlert(message, type) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.textContent = message;
+            document.querySelector('.auth-form').parentElement.insertBefore(alertDiv, document.querySelector('.auth-form'));
+            setTimeout(() => alertDiv.remove(), 5000);
+        }
+    </script>
+</body>
+
+</html>

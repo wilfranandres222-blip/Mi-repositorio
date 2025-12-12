@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planeta de Blogs</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    <style>
+        @keyframes twinkle {
+            0%,
+            100% {
+                opacity: 0.2;
+            }
+            50% {
+                opacity: 0.8;
+            }
+        }
+        
+        @keyframes spin-slow {
+            from {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+            to {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
+        }
+        
+        @keyframes spin-slower {
+            from {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+            to {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
+        }
+        
+        @keyframes spin-slowest {
+            from {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+            to {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        @keyframes zoomIn {
+            from {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        
+        .animate-spin-slow {
+            animation: spin-slow 30s linear infinite;
+        }
+        
+        .animate-spin-slower {
+            animation: spin-slower 40s linear infinite;
+        }
+        
+        .animate-spin-slowest {
+            animation: spin-slowest 50s linear infinite;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.2s ease-out;
+        }
+        
+        .zoom-in {
+            animation: zoomIn 0.3s ease-out;
+        }
+        
+        .star {
+            animation: twinkle 2s infinite;
+        }
+        /* Estilos para el hero orbital */
+        
+        .hero-orbital {
+            position: relative;
+            height: calc(100vh - 80px);
+            background: linear-gradient(135deg, #050816 0%, #0f0f1e 50%, #1a0a2e 100%);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        #stars {
+            position: absolute;
+            inset: 0;
+        }
+        
+        .orbits-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .orbit {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            border-radius: 50%;
+            border: 1px solid;
+            transform: translate(-50%, -50%);
+        }
+        
+        .orbit-1 {
+            width: 500px;
+            height: 500px;
+            border-color: rgba(99, 102, 241, 0.2);
+            animation: spin-slow 30s linear infinite;
+        }
+        
+        .orbit-2 {
+            width: 380px;
+            height: 380px;
+            border-color: rgba(236, 72, 153, 0.2);
+            animation: spin-slower 40s linear infinite;
+        }
+        
+        .orbit-3 {
+            width: 260px;
+            height: 260px;
+            border-color: rgba(34, 197, 194, 0.2);
+            animation: spin-slowest 50s linear infinite;
+        }
+        
+        .planet-center {
+            position: relative;
+            z-index: 10;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4f46e5 0%, #a855f7 50%, #ec4899 100%);
+            box-shadow: 0 0 60px rgba(168, 85, 247, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        
+        .planet-shine {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            filter: blur(40px);
+        }
+        
+        .planet-ring {
+            position: absolute;
+            width: 250px;
+            height: 60px;
+            border: 4px solid rgba(99, 102, 241, 0.4);
+            border-radius: 50%;
+            transform: rotateX(75deg);
+            background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.2), transparent);
+        }
+        
+        .planet-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+        }
+        
+        .planet-content h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            letter-spacing: 0.15em;
+            color: white;
+            text-transform: uppercase;
+            margin: 0;
+        }
+        
+        .planet-content p {
+            font-size: 0.75rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: rgba(232, 121, 249, 0.8);
+            margin: 0.5rem 0 0 0;
+        }
+    </style>
+</head>
+
+<body style="margin: 0; padding: 0; background: #050816; color: white;">
+
+    <!-- Header/Navigation -->
+    <header class="topbar">
+        <div class="logo">
+            <a href="{{ url_for('index') }}">PLANETA</a>
+        </div>
+        <nav class="navbar">
+            <a href="#inicio">Inicio</a>
+            <a href="#caracteristicas">Características</a>
+            <a href="#contacto">Contacto</a>
+            <a href="{{ url_for('login') }}" class="btn-login">Iniciar Sesión</a>
+            <a href="{{ url_for('register') }}" class="btn-register">Registrarse</a>
+        </nav>
+    </header>
+
+    <!-- Hero Section Orbital -->
+    <section id="inicio" class="hero-orbital">
+        <!-- Estrellas de fondo -->
+        <div id="stars"></div>
+
+        <!-- Órbitas -->
+        <div class="orbits-container">
+            <div class="orbit orbit-1"></div>
+            <div class="orbit orbit-2"></div>
+            <div class="orbit orbit-3"></div>
+
+            <!-- Planeta central -->
+            <div class="planet-center">
+                <div class="planet-shine"></div>
+                <div class="planet-ring"></div>
+                <div class="planet-content">
+                    <p>Bienvenido a</p>
+                    <h1>PLANETA</h1>
+                    <p>Comparte tus historias</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA flotante -->
+        <div style="position: absolute; bottom: 50px; z-index: 20; display: flex; gap: 20px;">
+            <a href="{{ url_for('register') }}" class="btn btn-primary btn-large" style="padding: 12px 32px; background: linear-gradient(135deg, #4f46e5 0%, #a855f7 100%); border: none; color: white; border-radius: 50px; font-weight: bold; text-decoration: none; transition: all 0.3s;">
+                Comienza Ahora
+            </a>
+            <a href="#caracteristicas" class="btn btn-secondary btn-large" style="padding: 12px 32px; border: 2px solid rgba(255,255,255,0.3); background: transparent; color: white; border-radius: 50px; font-weight: bold; text-decoration: none; transition: all 0.3s;">
+                Saber Más
+            </a>
+        </div>
+    </section>
+
+    <!-- Características Section -->
+    <section id="caracteristicas" class="caracteristicas" style="background: #0a0a1a; padding: 80px 20px;">
+        <h2 style="text-align: center; font-size: 2.5rem; margin-bottom: 60px; background: linear-gradient(135deg, #4f46e5, #a855f7, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+            ¿Por Qué Elegir Planeta de Blogs?
+        </h2>
+        <div class="caracteristicas-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto;">
+            <div class="caracteristica-card" style="background: linear-gradient(135deg, rgba(79, 70, 229, 0.1), rgba(168, 85, 247, 0.1)); padding: 40px; border-radius: 20px; border: 1px solid rgba(79, 70, 229, 0.3); text-align: center;">
+                <div class="icon" style="font-size: 3rem; margin-bottom: 20px;">📝</div>
+                <h3 style="color: white; margin-bottom: 15px;">Crea Blogs Fácilmente</h3>
+                <p style="color: rgba(255,255,255,0.7);">Interfaz intuitiva para crear y publicar tus blogs en segundos</p>
+            </div>
+            <div class="caracteristica-card" style="background: linear-gradient(135deg, rgba(236, 72, 153, 0.1), rgba(168, 85, 247, 0.1)); padding: 40px; border-radius: 20px; border: 1px solid rgba(236, 72, 153, 0.3); text-align: center;">
+                <div class="icon" style="font-size: 3rem; margin-bottom: 20px;">👥</div>
+                <h3 style="color: white; margin-bottom: 15px;">Conecta con Otros</h3>
+                <p style="color: rgba(255,255,255,0.7);">Comparte con amigos y sigue a otros bloggers interesantes</p>
+            </div>
+            <div class="caracteristica-card" style="background: linear-gradient(135deg, rgba(34, 197, 194, 0.1), rgba(168, 85, 247, 0.1)); padding: 40px; border-radius: 20px; border: 1px solid rgba(34, 197, 194, 0.3); text-align: center;">
+                <div class="icon" style="font-size: 3rem; margin-bottom: 20px;">🎨</div>
+                <h3 style="color: white; margin-bottom: 15px;">Personalización</h3>
+                <p style="color: rgba(255,255,255,0.7);">Personaliza tu perfil y haz único tu espacio en el planeta</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" style="background: linear-gradient(135deg, #4f46e5 0%, #a855f7 50%, #ec4899 100%); padding: 80px 20px; text-align: center;">
+        <h2 style="font-size: 2rem; margin-bottom: 20px; color: white;">Únete a Nuestra Comunidad Hoy</h2>
+        <p style="font-size: 1.1rem; margin-bottom: 30px; color: rgba(255,255,255,0.9);">Miles de usuarios ya están compartiendo sus historias en Planeta de Blogs</p>
+        <a href="{{ url_for('register') }}" class="btn btn-primary btn-large" style="padding: 15px 40px; background: white; color: #4f46e5; border: none; border-radius: 50px; font-weight: bold; text-decoration: none; font-size: 1.1rem; display: inline-block; transition: all 0.3s;">
+            Crear Cuenta Gratis
+        </a>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contacto" class="footer" style="background: #050816; border-top: 1px solid rgba(255,255,255,0.1); padding: 40px 20px;">
+        <div class="footer-content" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; max-width: 1200px; margin: 0 auto 40px;">
+            <div class="footer-section">
+                <h4 style="color: white; margin-bottom: 15px;">Acerca de</h4>
+                <p style="color: rgba(255,255,255,0.7);">Planeta de Blogs es una plataforma moderna y segura para compartir historias.</p>
+            </div>
+            <div class="footer-section">
+                <h4 style="color: white; margin-bottom: 15px;">Enlaces Rápidos</h4>
+                <ul style="list-style: none; padding: 0;">
+                    <li><a href="{{ url_for('login') }}" style="color: rgba(255,255,255,0.7); text-decoration: none; transition: color 0.3s;">Iniciar Sesión</a></li>
+                    <li><a href="{{ url_for('register') }}" style="color: rgba(255,255,255,0.7); text-decoration: none; transition: color 0.3s;">Registrarse</a></li>
+                    <li><a href="#" style="color: rgba(255,255,255,0.7); text-decoration: none; transition: color 0.3s;">Ayuda</a></li>
+                    <li><a href="#" style="color: rgba(255,255,255,0.7); text-decoration: none; transition: color 0.3s;">Contacto</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4 style="color: white; margin-bottom: 15px;">Legal</h4>
+                <ul style="list-style: none; padding: 0;">
+                    <li><a href="#" style="color: rgba(255,255,255,0.7); text-decoration: none; transition: color 0.3s;">Términos de Servicio</a></li>
+                    <li><a href="#" style="color: rgba(255,255,255,0.7); text-decoration: none; transition: color 0.3s;">Política de Privacidad</a></li>
+                    <li><a href="#" style="color: rgba(255,255,255,0.7); text-decoration: none; transition: color 0.3s;">Cookies</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4 style="color: white; margin-bottom: 15px;">Síguenos</h4>
+                <div class="social-links" style="display: flex; gap: 15px;">
+                    <a href="#" style="color: rgba(255,255,255,0.7); text-decoration: none; transition: color 0.3s;">Facebook</a>
+                    <a href="#" style="color: rgba(255,255,255,0.7); text-decoration: none; transition: color 0.3s;">Twitter</a>
+                    <a href="#" style="color: rgba(255,255,255,0.7); text-decoration: none; transition: color 0.3s;">Instagram</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom" style="text-align: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">
+            <p style="color: rgba(255,255,255,0.5);">&copy; 2025 Planeta de Blogs. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Generar estrellas
+        const starsContainer = document.getElementById('stars');
+        for (let i = 0; i < 40; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.position = 'absolute';
+            star.style.width = '2px';
+            star.style.height = '2px';
+            star.style.background = 'white';
+            star.style.borderRadius = '50%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 2 + 's';
+            starsContainer.appendChild(star);
+        }
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+
+</html>

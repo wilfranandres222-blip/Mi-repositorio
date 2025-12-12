@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXENA - Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <style>
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        .slide-in {
+            animation: slideIn 0.3s ease-out;
+        }
+    </style>
+    <style>
+        /* Botones grandes para la barra lateral y efecto hover lift */
+        
+        .sidebar-btn {
+            padding: 1rem 1rem;
+            border-radius: 12px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.01), rgba(255, 255, 255, 0.02));
+            color: rgba(255, 255, 255, 0.85);
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            text-decoration: none;
+            transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s;
+        }
+        
+        .sidebar-btn:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 30px rgba(79, 70, 229, 0.18);
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.06), rgba(168, 85, 247, 0.03));
+            color: white;
+        }
+        /* Blog card clickable lift */
+        
+        .clickable-card {
+            cursor: pointer;
+            transition: transform 0.18s ease, box-shadow 0.18s ease;
+        }
+        
+        .clickable-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+        }
+        /* Custom dropdown (dark) inside modal */
+        
+        .custom-dropdown {
+            position: relative;
+        }
+        
+        .custom-dropdown button.selected {
+            width: 100%;
+            text-align: left;
+            padding: 0.8rem;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(79, 70, 229, 0.14);
+            color: white;
+        }
+        
+        .custom-dropdown .menu {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: calc(100% + 6px);
+            background: #0a0a10;
+            border: 1px solid rgba(79, 70, 229, 0.15);
+            border-radius: 8px;
+            padding: 0.5rem;
+            display: none;
+            z-index: 60;
+        }
+        
+        .custom-dropdown .menu .item {
+            padding: 0.6rem;
+            border-radius: 8px;
+            color: rgba(255, 255, 255, 0.85);
+            cursor: pointer;
+            transition: background 0.12s, transform 0.12s;
+        }
+        
+        .custom-dropdown .menu .item:hover {
+            background: rgba(255, 255, 255, 0.02);
+            transform: translateY(-3px);
+        }
+    </style>
+</head>
+
+<body style="margin: 0; padding: 0; background: #050816; color: white;">
+
+    <!-- Header/Navigation Mejorado -->
+    <header class="topbar" style="border-bottom: 1px solid rgba(79, 70, 229, 0.2);">
+        <div class="logo" style="display: flex; align-items: center; gap: 15px;">
+            <button id="btnMenuHamburguesa" onclick="toggleSidebar()" style="background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; display: none;">☰</button>
+            <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #4f46e5 0%, #a855f7 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">NX</div>
+            <a href="{{ url_for('dashboard') }}" style="color: white; font-size: 1.3rem; font-weight: bold; letter-spacing: 0.1em;">NEXENA</a>
+        </div>
+        <nav class="navbar" style="gap: 3rem;">
+            <a href="{{ url_for('dashboard') }}" style="color: rgba(255,255,255,0.7); transition: all 0.3s;">Dashboard</a>
+            <a href="{{ url_for('perfil') }}" style="color: rgba(255,255,255,0.7); transition: all 0.3s;">Perfil</a>
+            <div style="display: flex; align-items: center; gap: 2rem;">
+                <span style="color: rgba(255,255,255,0.6);">{{ usuario.nombre }}</span>
+                <a href="{{ url_for('logout') }}" class="btn-logout" style="padding: 0.5rem 1.5rem; background: linear-gradient(135deg, #4f46e5 0%, #a855f7 100%); border-radius: 50px; color: white; text-decoration: none; font-weight: 600; transition: all 0.3s;">Salir</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Container -->
+    <div style="display: flex; min-height: calc(100vh - 80px);">
+        <!-- Sidebar Mejorado -->
+        <aside id="sidebar" style="width: 280px; background: linear-gradient(180deg, #0a0a1a 0%, #0f0f1e 100%); border-right: 1px solid rgba(79, 70, 229, 0.2); padding: 2rem 0; overflow-y: auto; transition: all 0.3s ease;">
+            <div style="padding: 0 1.5rem;">
+                <!-- Sección Menú -->
+                <div style="margin-bottom: 2rem;">
+                    <h3 style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.5); margin-bottom: 1rem; font-weight: 600;">Menú Principal</h3>
+                    <nav style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <a href="#" onclick="mostrarMisBlogs(); return false;" style="padding: 0.8rem 1rem; color: rgba(255,255,255,0.7); text-decoration: none; border-radius: 8px; transition: all 0.3s; display: flex; align-items: center; gap: 0.8rem;">
+                            📝 Mis Blogs
+                        </a>
+                        <a href="#" style="padding: 0.8rem 1rem; color: rgba(255,255,255,0.7); text-decoration: none; border-radius: 8px; transition: all 0.3s; display: flex; align-items: center; gap: 0.8rem;">
+                            ⭐ Favoritos
+                        </a>
+                        <a href="#" style="padding: 0.8rem 1rem; color: rgba(255,255,255,0.7); text-decoration: none; border-radius: 8px; transition: all 0.3s; display: flex; align-items: center; gap: 0.8rem;">
+                            👥 Seguidores
+                        </a>
+                    </nav>
+                </div>
+
+                <!-- Buscar usuario -->
+                <div style="margin-bottom: 1.5rem;">
+                    <h3 style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.5); margin-bottom: 0.75rem; font-weight: 600;">Buscar Usuario</h3>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <input id="inputBuscarUsuario" type="text" placeholder="Nombre o ID" style="flex:1; padding:0.6rem; border-radius:8px; background: rgba(255,255,255,0.03); border:1px solid rgba(79,70,229,0.12); color: white;" />
+                        <button onclick="buscarUsuario()" style="padding:0.6rem 0.8rem; border-radius:8px; background: linear-gradient(135deg,#4f46e5 0%,#a855f7 100%); border:none; color:white; cursor:pointer;">🔎</button>
+                    </div>
+                </div>
+
+                <!-- Divisor -->
+                <div style="height: 1px; background: rgba(79, 70, 229, 0.2); margin: 1.5rem 0;"></div>
+
+                <!-- Sección Categorías -->
+                <div>
+                    <h3 style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.5); margin-bottom: 1rem; font-weight: 600;">Categorías</h3>
+                    <nav style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <a href="#" class="sidebar-btn" onclick="filtrarPor('vida-diaria'); return false;">
+                            📖 Vida Diaria
+                        </a>
+                        <a href="#" class="sidebar-btn" onclick="filtrarPor('cocina'); return false;">
+                            🍳 Cocina
+                        </a>
+                        <a href="#" class="sidebar-btn" onclick="filtrarPor('viajes'); return false;">
+                            ✈️ Viajes
+                        </a>
+                        <a href="#" class="sidebar-btn" onclick="filtrarPor('tecnologia'); return false;">
+                            💻 Tecnología
+                        </a>
+                        <a href="#" class="sidebar-btn" onclick="filtrarPor('curiosidades'); return false;">
+                            🔬 Curiosidades
+                        </a>
+                    </nav>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Mejorado -->
+        <main style="flex: 1; padding: 2rem; overflow-y: auto;">
+            <!-- Header Section -->
+            <div style="margin-bottom: 2rem;">
+                <div style="background: linear-gradient(135deg, rgba(79, 70, 229, 0.1) 0%, rgba(168, 85, 247, 0.1) 100%); border: 1px solid rgba(79, 70, 229, 0.3); border-radius: 15px; padding: 2rem; margin-bottom: 2rem;">
+                    <h1 style="margin: 0 0 0.5rem 0; background: linear-gradient(135deg, #4f46e5 0%, #a855f7 50%, #ec4899 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">¡Bienvenido, {{ usuario.nombre }}! 👋</h1>
+                    <p style="margin: 0; color: rgba(255,255,255,0.6);">Estás en Planeta de Blogs</p>
+                </div>
+
+                <!-- Quick Actions -->
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <button onclick="abrirModalCrearBlog()" style="padding: 0.8rem 2rem; background: linear-gradient(135deg, #4f46e5 0%, #a855f7 50%, #ec4899 100%); color: white; border: none; border-radius: 50px; font-weight: 600; cursor: pointer; transition: all 0.3s; box-shadow: 0 0 20px rgba(79, 70, 229, 0.3);">
+                        ✏️ Crear Nuevo Blog
+                    </button>
+                    <button style="padding: 0.8rem 2rem; background: rgba(79, 70, 229, 0.1); color: #4f46e5; border: 1px solid rgba(79, 70, 229, 0.3); border-radius: 50px; font-weight: 600; cursor: pointer; transition: all 0.3s;">
+                        🔍 Explorar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Blogs Recientes Section -->
+            <div style="margin-bottom: 2rem;">
+                <h2 style="font-size: 1.5rem; margin-bottom: 1.5rem; color: white;">Tus Blogs Recientes</h2>
+                <div id="blogsContainer" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem;">
+                    <!-- Blog cards aquí -->
+                    <div class="blog-card" style="text-align:center;color:rgba(255,255,255,0.5);">
+                        <div class="outline outline--violet"></div>
+                        <div class="blog-inner" style="justify-content:center;">
+                            <div style="display:block;">
+                                <div style="width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,#7c3aed,#a855f7);display:flex;align-items:center;justify-content:center;margin:0 auto 8px;font-weight:700;">NX</div>
+                                <div style="color:rgba(255,255,255,0.6);">📝 No tienes blogs aún</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Blogs Recomendados Section -->
+            <div>
+                <h2 style="font-size: 1.5rem; margin-bottom: 1.5rem; color: white;">Blogs Recomendados</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem;">
+                    <div style="background: linear-gradient(135deg, rgba(34, 197, 194, 0.1) 0%, rgba(79, 70, 229, 0.1) 100%); border: 1px solid rgba(34, 197, 194, 0.3); border-radius: 15px; padding: 1.5rem; transition: all 0.3s; cursor: pointer;" onmouseover="this.style.borderColor='rgba(34, 197, 194, 0.6)'"
+                        onmouseout="this.style.borderColor='rgba(34, 197, 194, 0.3)'">
+                        <h3 style="margin: 0 0 0.5rem 0; color: white;">Introducción a Planeta de Blogs</h3>
+                        <p style="margin: 0 0 1rem 0; color: rgba(255,255,255,0.6); font-size: 0.9rem;">Una guía completa para empezar a compartir tu contenido.</p>
+                        <div style="display: flex; justify-content: space-between; align-items: center; color: rgba(255,255,255,0.5); font-size: 0.85rem;">
+                            <span>📅 Hace 2 días</span>
+                            <a href="#" style="color: #22c5c4; text-decoration: none;">Leer más →</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal para crear blog -->
+    <div id="modalCrearBlog" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(5px);">
+        <div style="background: linear-gradient(135deg, #0a0a1a 0%, #0f0f1e 100%); border: 1px solid rgba(79, 70, 229, 0.3); border-radius: 20px; padding: 2rem; max-width: 500px; width: 90%; box-shadow: 0 20px 60px rgba(79, 70, 229, 0.2);">
+            <h2 style="margin: 0 0 1.5rem 0; color: white;">Crear Nuevo Blog</h2>
+            <form style="display: flex; flex-direction: column; gap: 1rem;" onsubmit="crearBlog(event)">
+                <div>
+                    <label style="display: block; margin-bottom: 0.5rem; color: rgba(255,255,255,0.8); font-weight: 600;">Título</label>
+                    <input type="text" placeholder="Mi primer blog..." required style="width: 100%; padding: 0.8rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(79, 70, 229, 0.3); border-radius: 8px; color: white; font-size: 1rem;" />
+                </div>
+                <div>
+                    <label style="display: block; margin-bottom: 0.5rem; color: rgba(255,255,255,0.8); font-weight: 600;">Categoría</label>
+                    <div class="custom-dropdown" id="dropdownCategoria">
+                        <input type="hidden" id="categoriaSeleccionada" value="" />
+                        <button type="button" class="selected" id="btnCategoria">Sin categoría</button>
+                        <div class="menu" id="menuCategoria">
+                            <div class="item" data-value="">Sin categoría</div>
+                            <div class="item" data-value="vida-diaria">📖 Vida Diaria</div>
+                            <div class="item" data-value="cocina">🍳 Cocina</div>
+                            <div class="item" data-value="viajes">✈️ Viajes</div>
+                            <div class="item" data-value="tecnologia">💻 Tecnología</div>
+                            <div class="item" data-value="curiosidades">🔬 Curiosidades</div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <label style="display: block; margin-bottom: 0.5rem; color: rgba(255,255,255,0.8); font-weight: 600;">Contenido</label>
+                    <textarea id="inputContenidoBlog" placeholder="Escribe tu contenido aquí..." required style="width: 100%; padding: 0.8rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(79, 70, 229, 0.3); border-radius: 8px; color: white; font-size: 1rem; min-height: 150px; resize: vertical;"></textarea>
+                </div>
+                <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1rem;">
+                    <button type="button" onclick="cerrarModalCrearBlog()" style="padding: 0.8rem 1.5rem; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); color: rgba(255,255,255,0.7); border-radius: 8px; cursor: pointer; font-weight: 600;">Cancelar</button>
+                    <button type="submit" id="btnPublicarBlog" style="padding: 0.8rem 1.5rem; background: linear-gradient(135deg, #4f46e5 0%, #a855f7 100%); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">Publicar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const main = document.querySelector('main');
+            sidebar.style.display = sidebar.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Mostrar botón hamburguesa en móvil
+        function checkResponsive() {
+            const btn = document.getElementById('btnMenuHamburguesa');
+            const sidebar = document.getElementById('sidebar');
+            if (window.innerWidth < 768) {
+                btn.style.display = 'block';
+                sidebar.style.display = 'none';
+            } else {
+                btn.style.display = 'none';
+                sidebar.style.display = 'block';
+            }
+        }
+
+        window.addEventListener('resize', checkResponsive);
+        window.addEventListener('load', checkResponsive);
+
+        function abrirModalCrearBlog() {
+            document.getElementById('modalCrearBlog').style.display = 'flex';
+        }
+
+        function cerrarModalCrearBlog() {
+            document.getElementById('modalCrearBlog').style.display = 'none';
+        }
+
+        function crearBlog(event) {
+            event.preventDefault();
+            const titulo = document.querySelector('#modalCrearBlog input[type="text"]').value.trim();
+            const contenido = document.getElementById('inputContenidoBlog').value.trim();
+            const categoria = document.getElementById('categoriaSeleccionada') ? document.getElementById('categoriaSeleccionada').value : '';
+
+            if (!titulo || !contenido) {
+                alert('❌ Complete todos los campos');
+                return;
+            }
+
+            const btn = document.getElementById('btnPublicarBlog');
+            btn.disabled = true;
+            btn.style.opacity = '0.7';
+
+            (async() => {
+                try {
+                    const resp = await fetch('/crear_blog', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        body: JSON.stringify({
+                            titulo,
+                            contenido,
+                            categoria
+                        })
+                    });
+
+                    const text = await resp.text();
+                    let json = null;
+                    try {
+                        json = JSON.parse(text);
+                    } catch (_) { /* not JSON */ }
+
+                    if (!resp.ok) {
+                        const msg = (json && json.mensaje) ? json.mensaje : (text || 'Error desconocido');
+                        alert('❌ ' + msg);
+                        return;
+                    }
+
+                    // OK
+                    if (json && json.success) {
+                        cerrarModalCrearBlog();
+                        cargarBlogs();
+                    } else {
+                        // fallback: if server returned plain text
+                        cerrarModalCrearBlog();
+                        cargarBlogs();
+                    }
+                } catch (e) {
+                    console.error('Error:', e);
+                    alert('❌ Error al crear el blog (network)');
+                } finally {
+                    btn.disabled = false;
+                    btn.style.opacity = '1';
+                }
+            })();
+        }
+
+        // Buscar usuario por nombre o usuario_id y redirigir al perfil público
+        function buscarUsuario() {
+            const q = document.getElementById('inputBuscarUsuario').value.trim();
+            if (!q) {
+                alert('Ingresa el nombre de usuario o ID a buscar');
+                return;
+            }
+
+            fetch(`/api/buscar_usuario?q=${encodeURIComponent(q)}`)
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success && data.usuario_id) {
+                        window.location.href = `/perfil_publico/${data.usuario_id}`;
+                    } else {
+                        alert('Usuario no encontrado');
+                    }
+                })
+                .catch(e => {
+                    console.error('Error buscando usuario:', e);
+                    alert('Error al buscar usuario');
+                });
+        }
+
+        function cargarBlogs() {
+            (async() => {
+                const container = document.getElementById('blogsContainer');
+                const map = {
+                    'vida-diaria': 'outline--violet',
+                    'cocina': 'outline--orange',
+                    'viajes': 'outline--cyan',
+                    'tecnologia': 'outline--cyan',
+                    'curiosidades': 'outline--pink'
+                };
+
+                try {
+                    const resp = await fetch('/obtener_blogs', {
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    });
+                    const text = await resp.text();
+                    let data = null;
+                    try {
+                        data = JSON.parse(text);
+                    } catch (_) {
+                        data = null;
+                    }
+
+                    if (!resp.ok) {
+                        console.warn('obtener_blogs returned', resp.status, text);
+                        container.innerHTML = '<div class="blog-card" style="text-align:center;color:rgba(255,255,255,0.5);">\n                            <div class="outline outline--violet"></div>\n                            <div class="blog-inner" style="justify-content:center;">\n                                <div style="display:block;">\n                                    <div style="width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,#7c3aed,#a855f7);display:flex;align-items:center;justify-content:center;margin:0 auto 8px;font-weight:700;">NX</div>\n                                    <div style="color:rgba(255,255,255,0.6);">🔒 Debes iniciar sesión para ver tus blogs</div>\n                                </div>\n                            </div>\n                        </div>';
+                        return;
+                    }
+
+                    if (!data || !data.blogs || data.blogs.length === 0) {
+                        container.innerHTML = '<div class="blog-card" style="text-align:center;color:rgba(255,255,255,0.5);">\n                            <div class="outline outline--violet"></div>\n                            <div class="blog-inner" style="justify-content:center;">\n                                <div style="display:block;">\n                                    <div style="width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,#7c3aed,#a855f7);display:flex;align-items:center;justify-content:center;margin:0 auto 8px;font-weight:700;">NX</div>\n                                    <div style="color:rgba(255,255,255,0.6);">📝 No tienes blogs aún</div>\n                                </div>\n                            </div>\n                        </div>';
+                        return;
+                    }
+
+                    container.innerHTML = data.blogs.map(blog => {
+                        const outlineClass = map[blog.categoria] || 'outline--violet';
+                        const iconLetter = (blog.categoria && blog.categoria[0]) ? blog.categoria[0].toUpperCase() : 'B';
+                        const fecha = blog.fecha || '';
+
+                        return `
+                        <div class="blog-card clickable-card" onclick="window.location.href='/nexena-notes-orbit?blog_id=${blog.id}'">
+                            <div class="outline ${outlineClass}"></div>
+                            <div class="blog-inner">
+                                <div class="blog-icon" style="background:linear-gradient(135deg,#7c3aed,#a855f7);">${iconLetter}</div>
+                                <div class="blog-body">
+                                    <div class="blog-title">${blog.titulo}</div>
+                                    <div class="blog-meta"><span>📅 ${fecha}</span><span>${(blog.categoria||'Sin categoría').toUpperCase()}</span></div>
+                                    <div class="blog-desc">${blog.contenido}</div>
+                                </div>
+                                <div style="margin-left:12px; align-self:flex-start;"><a class="blog-cta" href="/nexena-notes-orbit?blog_id=${blog.id}">Ver más →</a></div>
+                            </div>
+                        </div>`;
+                    }).join('');
+                } catch (e) {
+                    console.error('Error cargando blogs:', e);
+                    container.innerHTML = '<div class="blog-card" style="text-align:center;color:rgba(255,255,255,0.5);">\n                        <div class="outline outline--violet"></div>\n                        <div class="blog-inner" style="justify-content:center;">\n                            <div style="display:block;">\n                                <div style="width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,#7c3aed,#a855f7);display:flex;align-items:center;justify-content:center;margin:0 auto 8px;font-weight:700;">NX</div>\n                                <div style="color:rgba(255,255,255,0.6);">⚠️ Error al cargar blogs</div>\n                            </div>\n                        </div>\n                    </div>';
+                }
+            })();
+        }
+
+        function mostrarMisBlogs() {
+            cargarBlogs();
+        }
+
+        function filtrarPor(categoria) {
+            (async() => {
+                const container = document.getElementById('blogsContainer');
+                const map = {
+                    'vida-diaria': 'outline--violet',
+                    'cocina': 'outline--orange',
+                    'viajes': 'outline--cyan',
+                    'tecnologia': 'outline--cyan',
+                    'curiosidades': 'outline--pink'
+                };
+
+                try {
+                    const resp = await fetch(`/obtener_blogs_categoria/${categoria}`, {
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    });
+                    const text = await resp.text();
+                    let data = null;
+                    try {
+                        data = JSON.parse(text);
+                    } catch (_) {
+                        data = null;
+                    }
+
+                    if (!resp.ok) {
+                        console.warn('obtener_blogs_categoria returned', resp.status, text);
+                        container.innerHTML = '<div class="blog-card" style="text-align:center;color:rgba(255,255,255,0.5);">\n                            <div class="outline outline--violet"></div>\n                            <div class="blog-inner" style="justify-content:center;">\n                                <div style="display:block;">\n                                    <div style="width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,#7c3aed,#a855f7);display:flex;align-items:center;justify-content:center;margin:0 auto 8px;font-weight:700;">NX</div>\n                                    <div style="color:rgba(255,255,255,0.6);">🔒 Debes iniciar sesión</div>\n                                </div>\n                            </div>\n                        </div>';
+                        return;
+                    }
+
+                    if (!data || !data.blogs || data.blogs.length === 0) {
+                        container.innerHTML = '<div class="blog-card" style="text-align:center;color:rgba(255,255,255,0.5);">\n                            <div class="outline outline--violet"></div>\n                            <div class="blog-inner" style="justify-content:center;">\n                                <div style="display:block;">\n                                    <div style="width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,#7c3aed,#a855f7);display:flex;align-items:center;justify-content:center;margin:0 auto 8px;font-weight:700;">NX</div>\n                                    <div style="color:rgba(255,255,255,0.6);">📝 Sin blogs en esta categoría</div>\n                                </div>\n                            </div>\n                        </div>';
+                        return;
+                    }
+
+                    container.innerHTML = data.blogs.map(blog => {
+                        const outlineClass = map[blog.categoria] || 'outline--violet';
+                        const iconLetter = (blog.categoria && blog.categoria[0]) ? blog.categoria[0].toUpperCase() : 'B';
+                        const fecha = blog.fecha || '';
+
+                        return `
+                        <div class="blog-card clickable-card" onclick="window.location.href='/nexena-notes-orbit?blog_id=${blog.id}'">
+                            <div class="outline ${outlineClass}"></div>
+                            <div class="blog-inner">
+                                <div class="blog-icon" style="background:linear-gradient(135deg,#06b6d4,#3b82f6);">${iconLetter}</div>
+                                <div class="blog-body">
+                                    <div class="blog-title">${blog.titulo}</div>
+                                    <div class="blog-meta"><span>📅 ${fecha}</span><span>${(blog.categoria||'Sin categoría').toUpperCase()}</span></div>
+                                    <div class="blog-desc">${blog.contenido}</div>
+                                </div>
+                                <div style="margin-left:12px; align-self:flex-start;"><a class="blog-cta" href="/nexena-notes-orbit?blog_id=${blog.id}">Ver más →</a></div>
+                            </div>
+                        </div>`;
+                    }).join('');
+                } catch (e) {
+                    console.error('Error cargando categoría:', e);
+                    container.innerHTML = '<div class="blog-card" style="text-align:center;color:rgba(255,255,255,0.5);">\n                        <div class="outline outline--violet"></div>\n                        <div class="blog-inner" style="justify-content:center;">\n                            <div style="display:block;">\n                                <div style="width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,#7c3aed,#a855f7);display:flex;align-items:center;justify-content:center;margin:0 auto 8px;font-weight:700;">NX</div>\n                                <div style="color:rgba(255,255,255,0.6);">⚠️ Error al filtrar</div>\n                            </div>\n                        </div>\n                    </div>';
+                }
+            })();
+        }
+
+        // Cerrar modal al hacer click fuera
+        document.getElementById('modalCrearBlog').addEventListener('click', function(e) {
+            if (e.target === this) {
+                cerrarModalCrearBlog();
+            }
+        });
+
+        // Cargar blogs al iniciar
+        window.addEventListener('load', cargarBlogs);
+    </script>
+
+    <script>
+        // Dropdown categoría: toggle y selección
+        (function() {
+            const btn = document.getElementById('btnCategoria');
+            const menu = document.getElementById('menuCategoria');
+            const hidden = document.getElementById('categoriaSeleccionada');
+
+            if (!btn || !menu || !hidden) return;
+
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+            });
+
+            menu.querySelectorAll('.item').forEach(it => {
+                it.addEventListener('click', () => {
+                    const val = it.getAttribute('data-value') || '';
+                    hidden.value = val;
+                    btn.textContent = it.textContent.trim();
+                    menu.style.display = 'none';
+                });
+            });
+
+            // Cerrar al click fuera
+            document.addEventListener('click', () => {
+                if (menu) menu.style.display = 'none';
+            });
+        })();
+    </script>
+
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+
+</html>

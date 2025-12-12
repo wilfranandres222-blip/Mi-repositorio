@@ -1,0 +1,199 @@
+/* ====================================================================
+   ESTILOS INDEX - Landing Page
+   ==================================================================== */
+
+.hero-orbital {
+    position: relative;
+    height: calc(100vh - 80px);
+    background: linear-gradient(135deg, #050816 0%, #0f0f1e 50%, #1a0a2e 100%);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#stars {
+    position: absolute;
+    inset: 0;
+}
+
+.orbits-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.orbit {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    border-radius: 50%;
+    border: 1px solid;
+    transform: translate(-50%, -50%);
+}
+
+.orbit-1 {
+    width: 500px;
+    height: 500px;
+    border-color: rgba(79, 70, 229, 0.2);
+    animation: spin-slow 30s linear infinite;
+}
+
+.orbit-2 {
+    width: 380px;
+    height: 380px;
+    border-color: rgba(168, 85, 247, 0.2);
+    animation: spin-slower 40s linear infinite;
+}
+
+.orbit-3 {
+    width: 260px;
+    height: 260px;
+    border-color: rgba(34, 197, 194, 0.2);
+    animation: spin-slowest 50s linear infinite;
+}
+
+.planet-center {
+    position: relative;
+    z-index: 10;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4f46e5 0%, #a855f7 50%, #ec4899 100%);
+    box-shadow: 0 0 60px rgba(168, 85, 247, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.planet-shine {
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    width: 80px;
+    height: 80px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    filter: blur(40px);
+}
+
+.planet-ring {
+    position: absolute;
+    width: 250px;
+    height: 60px;
+    border: 4px solid rgba(79, 70, 229, 0.4);
+    border-radius: 50%;
+    transform: rotateX(75deg);
+    background: linear-gradient(90deg, transparent, rgba(79, 70, 229, 0.2), transparent);
+}
+
+.planet-content {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+}
+
+.planet-content h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    letter-spacing: 0.15em;
+    color: white;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.planet-content p {
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(232, 121, 249, 0.8);
+    margin: 0.5rem 0 0 0;
+}
+
+.caracteristicas {
+    background: linear-gradient(135deg, #050816 0%, #0f0f1e 50%, #1a0a2e 100%);
+    padding: 80px 20px;
+}
+
+.caracteristicas h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 60px;
+    background: linear-gradient(135deg, #4f46e5 0%, #a855f7 50%, #ec4899 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.caracteristicas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.caracteristica-card {
+    background: linear-gradient(135deg, rgba(79, 70, 229, 0.1), rgba(168, 85, 247, 0.1));
+    padding: 40px;
+    border-radius: 20px;
+    border: 1px solid rgba(79, 70, 229, 0.3);
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.caracteristica-card:hover {
+    border-color: rgba(79, 70, 229, 0.5);
+    box-shadow: 0 0 30px rgba(79, 70, 229, 0.2);
+    transform: translateY(-5px);
+}
+
+.caracteristica-card .icon {
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
+
+.caracteristica-card h3 {
+    color: white;
+    margin-bottom: 15px;
+}
+
+.caracteristica-card p {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.cta-section {
+    background: linear-gradient(135deg, #4f46e5 0%, #a855f7 50%, #ec4899 100%);
+    padding: 80px 20px;
+    text-align: center;
+}
+
+.cta-section h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: white;
+}
+
+.cta-section p {
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+@media (max-width: 768px) {
+    .planeta-center {
+        width: 150px;
+        height: 150px;
+    }
+    .planet-content h1 {
+        font-size: 1.8rem;
+    }
+    .caracteristicas h2 {
+        font-size: 1.8rem;
+    }
+    .cta-section h2 {
+        font-size: 1.5rem;
+    }
+}

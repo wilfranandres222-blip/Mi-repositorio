@@ -1,0 +1,479 @@
+/* ====================================================================
+   ESTILOS GLOBALES - Planeta de Blogs (Nexena Theme)
+   ==================================================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    /* Colores Nexena */
+    --color-indigo: #4f46e5;
+    --color-purple: #a855f7;
+    --color-pink: #ec4899;
+    --color-cyan: #22c5c4;
+    --color-dark: #050816;
+    --color-darker: #0a0a1a;
+    --color-card: #0f0f1e;
+    --color-white: #ffffff;
+    --color-gray-light: rgba(255, 255, 255, 0.7);
+    --color-gray: rgba(255, 255, 255, 0.5);
+    --color-gray-dark: rgba(255, 255, 255, 0.3);
+    --border-radius: 12px;
+    --border-radius-lg: 20px;
+    --transition: all 0.3s ease;
+    --box-shadow: 0 4px 20px rgba(79, 70, 229, 0.1);
+    --box-shadow-lg: 0 20px 60px rgba(79, 70, 229, 0.2);
+    --gradient-primary: linear-gradient(135deg, #4f46e5 0%, #a855f7 50%, #ec4899 100%);
+}
+
+html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+}
+
+body {
+    font-family: 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+    background: var(--color-dark);
+    color: var(--color-white);
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+
+/* ====================================================================
+   TIPOGRAFÍA
+   ==================================================================== */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: var(--color-white);
+    margin-bottom: 0.5em;
+    font-weight: 600;
+}
+
+h1 {
+    font-size: 2.5rem;
+    line-height: 1.2;
+}
+
+h2 {
+    font-size: 2rem;
+    line-height: 1.3;
+}
+
+h3 {
+    font-size: 1.5rem;
+}
+
+h4 {
+    font-size: 1.25rem;
+}
+
+p {
+    margin-bottom: 1rem;
+    color: var(--color-gray-light);
+}
+
+a {
+    color: var(--color-indigo);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+a:hover {
+    color: var(--color-purple);
+}
+
+
+/* ====================================================================
+   TOPBAR / NAVBAR
+   ==================================================================== */
+
+.topbar {
+    background: var(--color-darker);
+    border-bottom: 1px solid rgba(79, 70, 229, 0.2);
+    color: var(--color-white);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: var(--box-shadow);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+}
+
+.logo {
+    font-weight: bold;
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+}
+
+.logo a {
+    color: var(--color-white);
+    text-decoration: none;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.navbar {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.navbar a {
+    color: var(--color-gray-light);
+    font-weight: 500;
+    transition: var(--transition);
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+}
+
+.navbar a:hover {
+    background: rgba(79, 70, 229, 0.2);
+    color: var(--color-white);
+}
+
+.btn-login,
+.btn-register {
+    background: var(--gradient-primary);
+    color: var(--color-white);
+    padding: 0.5rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-login:hover,
+.btn-register:hover {
+    box-shadow: 0 0 30px rgba(79, 70, 229, 0.4);
+    transform: translateY(-2px);
+}
+
+
+/* ====================================================================
+   BOTONES
+   ==================================================================== */
+
+.btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    border-radius: 50px;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: var(--transition);
+    text-align: center;
+    text-decoration: none;
+}
+
+.btn-primary {
+    background: var(--gradient-primary);
+    color: var(--color-white);
+}
+
+.btn-primary:hover {
+    box-shadow: 0 0 30px rgba(79, 70, 229, 0.4);
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: var(--color-white);
+}
+
+.btn-secondary:hover {
+    border-color: rgba(255, 255, 255, 0.6);
+    background: rgba(79, 70, 229, 0.1);
+}
+
+.btn-danger {
+    background: var(--color-pink);
+    color: var(--color-white);
+}
+
+.btn-danger:hover {
+    box-shadow: 0 0 30px rgba(236, 72, 153, 0.4);
+    transform: translateY(-2px);
+}
+
+.btn-large {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+}
+
+
+/* ====================================================================
+   FORMULARIOS
+   ==================================================================== */
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--color-white);
+    font-weight: 600;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="date"],
+textarea,
+select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid rgba(79, 70, 229, 0.3);
+    border-radius: var(--border-radius);
+    font-family: inherit;
+    font-size: 1rem;
+    transition: var(--transition);
+    background: var(--color-card);
+    color: var(--color-white);
+}
+
+input[type="text"]::placeholder,
+input[type="email"]::placeholder,
+input[type="password"]::placeholder,
+input[type="date"]::placeholder,
+textarea::placeholder,
+select::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="date"]:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: var(--color-indigo);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+}
+
+textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.form-hint {
+    display: block;
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    color: var(--color-gray);
+}
+
+.checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.checkbox input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+    accent-color: var(--color-indigo);
+}
+
+
+/* ====================================================================
+   ALERTAS
+   ==================================================================== */
+
+.alert {
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    margin-bottom: 1rem;
+    border-left: 4px solid;
+}
+
+.alert-success {
+    background: rgba(34, 197, 194, 0.1);
+    border-color: var(--color-cyan);
+    color: #22c5c4;
+}
+
+.alert-danger {
+    background: rgba(236, 72, 153, 0.1);
+    border-color: var(--color-pink);
+    color: #fca5c0;
+}
+
+.alert-warning {
+    background: rgba(168, 85, 247, 0.1);
+    border-color: var(--color-purple);
+    color: #c9a3ff;
+}
+
+.alert-info {
+    background: rgba(79, 70, 229, 0.1);
+    border-color: var(--color-indigo);
+    color: #a5b4fc;
+}
+
+
+/* ====================================================================
+   MODALES
+   ==================================================================== */
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    background: var(--color-darker);
+    border-radius: var(--border-radius-lg);
+    border: 1px solid rgba(79, 70, 229, 0.2);
+    padding: 2rem;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: var(--box-shadow-lg);
+}
+
+.modal-header {
+    margin-bottom: 1.5rem;
+}
+
+.modal-header h2 {
+    margin: 0;
+}
+
+.modal-body {
+    margin-bottom: 1.5rem;
+}
+
+.modal-footer {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+}
+
+
+/* ====================================================================
+   CONTENEDORES
+   ==================================================================== */
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.card {
+    background: var(--color-card);
+    border: 1px solid rgba(79, 70, 229, 0.2);
+    border-radius: var(--border-radius-lg);
+    padding: 2rem;
+    box-shadow: var(--box-shadow);
+    transition: var(--transition);
+}
+
+.card:hover {
+    border-color: rgba(79, 70, 229, 0.4);
+    box-shadow: 0 0 30px rgba(79, 70, 229, 0.2);
+}
+
+
+/* ====================================================================
+   FOOTER
+   ==================================================================== */
+
+.footer {
+    background: var(--color-darker);
+    border-top: 1px solid rgba(79, 70, 229, 0.2);
+    padding: 2rem;
+    margin-top: 4rem;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto 2rem;
+}
+
+.footer-section h4 {
+    color: var(--color-white);
+    margin-bottom: 1rem;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.footer-section a {
+    display: block;
+    color: var(--color-gray-light);
+    margin-bottom: 0.5rem;
+    transition: var(--transition);
+}
+
+.footer-section a:hover {
+    color: var(--color-indigo);
+    transform: translateX(5px);
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(79, 70, 229, 0.2);
+    color: var(--color-gray);
+}
+
+
+/* ====================================================================
+   RESPONSIVE
+   ==================================================================== */
+
+@media (max-width: 768px) {
+    .navbar {
+        gap: 1rem;
+    }
+    h1 {
+        font-size: 1.8rem;
+    }
+    h2 {
+        font-size: 1.5rem;
+    }
+    h3 {
+        font-size: 1.2rem;
+    }
+    .btn-large {
+        padding: 0.8rem 1.6rem;
+        font-size: 1rem;
+    }
+    .modal-content {
+        width: 95%;
+        padding: 1.5rem;
+    }
+}

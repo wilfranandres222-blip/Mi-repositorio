@@ -1,0 +1,266 @@
+═══════════════════════════════════════════════════════════════════════
+  🪐 LOS PAPASPITUFOS - PLANETA DE BLOGS
+  Planeta de Blogs Moderna y Completamente Integrada
+═══════════════════════════════════════════════════════════════════════
+
+📋 INICIO RÁPIDO
+
+1. INSTALAR DEPENDENCIAS
+   ═════════════════════════════════════════════════════════════════════
+   
+   Windows:
+   --------
+   pip install flask werkzeug jinja2
+   
+   o usar requirements.txt:
+   pip install -r requirements.txt
+   
+   macOS/Linux:
+   -----------
+   pip3 install flask werkzeug jinja2
+   o
+   pip3 install -r requirements.txt
+
+2. EJECUTAR LA APLICACIÓN
+   ═════════════════════════════════════════════════════════════════════
+   
+   Windows:
+   --------
+   python run.py
+   
+   macOS/Linux:
+   -----------
+   python3 run.py
+
+3. ABRIR EN NAVEGADOR
+   ═════════════════════════════════════════════════════════════════════
+   
+   Dirección:
+   http://127.0.0.1:5000
+   
+   En la consola verás:
+   
+   ╔════════════════════════════════════════════════════════╗
+   ║       🪐 LOS PAPASPITUFOS - PLANETA DE BLOGS 🪐       ║
+   ║                                                        ║
+   ║  Iniciando servidor Flask...                          ║
+   ║  🌐 http://127.0.0.1:5000                            ║
+   ║  📊 Debug: True                                       ║
+   ║                                                        ║
+   ║  Presiona CTRL+C para detener el servidor             ║
+   ╚════════════════════════════════════════════════════════╝
+
+───────────────────────────────────────────────────────────────────────
+
+🎯 PRIMEROS PASOS
+
+1. CREAR UNA CUENTA
+   ═════════════════════════════════════════════════════════════════════
+   
+   • Haz clic en "Registrarse" en la página de inicio
+   • Completa el formulario:
+     - Nombre de usuario: (ej: miusuario)
+     - Documento: (ej: 123456789)
+     - Correo: (ej: tu@email.com)
+     - Contraseña: (mínimo 6 caracteres)
+   • Haz clic en "Crear Cuenta"
+
+2. INICIAR SESIÓN
+   ═════════════════════════════════════════════════════════════════════
+   
+   • Ve a "Iniciar Sesión"
+   • Ingresa los datos que registraste
+   • Haz clic en "Entrar"
+
+3. EXPLORAR EL DASHBOARD
+   ═════════════════════════════════════════════════════════════════════
+   
+   • Verás tu panel de control
+   • Puedes ver tu perfil haciendo clic en tu nombre
+   • Las funciones de blogs están preparadas para desarrollo futuro
+
+───────────────────────────────────────────────────────────────────────
+
+📁 ESTRUCTURA DEL PROYECTO
+
+prototipo_planeta_blocks_0.0.3/
+│
+├── run.py ..................... Script para ejecutar (python run.py)
+├── requirements.txt ........... Dependencias Python
+├── README.md .................. Documentación completa
+├── QUICK_START.md ............. Guía rápida
+├── CAMBIOS.md ................. Resumen de cambios
+├── TROUBLESHOOTING.md ......... Solución de problemas
+├── INDICE.md .................. Índice de archivos
+│
+├── app/ ....................... Código Python
+│   ├── __init__.py ............ Aplicación Flask principal
+│   └── database.py ............ Base de datos
+│
+├── templates/ ................. Páginas HTML
+│   ├── index.html ............. Página de inicio
+│   ├── login.html ............. Formulario de login
+│   ├── register.html .......... Formulario de registro
+│   ├── recuperar_contraseña.html
+│   ├── dashboard.html ......... Panel principal
+│   ├── perfil.html ............ Perfil de usuario
+│   └── error.html ............. Página de errores
+│
+├── static/
+│   ├── css/ ................... Estilos CSS
+│   │   ├── styles.css
+│   │   ├── auth.css
+│   │   ├── dashboard.css
+│   │   ├── perfil.css
+│   │   ├── index.css
+│   │   └── error.css
+│   │
+│   └── js/ .................... Scripts JavaScript
+│       ├── main.js
+│       ├── auth.js
+│       ├── dashboard.js
+│       └── perfil.js
+│
+└── database/ .................. Base de datos (se crea automáticamente)
+    └── prototipo.db
+
+───────────────────────────────────────────────────────────────────────
+
+🔐 FUNCIONALIDADES
+
+✅ AUTENTICACIÓN
+   • Registro de nuevos usuarios
+   • Login con validación
+   • Recuperación de contraseña
+   • Cambio de contraseña
+   • Eliminación de cuenta
+
+✅ DASHBOARD
+   • Panel personalizado
+   • Menú lateral con categorías
+   • Grid de blogs (preparado)
+   • Interfaz moderna
+
+✅ PERFIL
+   • Ver información personal
+   • Cambiar contraseña
+   • Eliminar cuenta (con confirmación)
+
+✅ SEGURIDAD
+   • Validación de entrada
+   • Sesiones seguras
+   • Protección contra XSS
+   • Base de datos local
+
+✅ DISEÑO
+   • Responsivo (móvil, tablet, desktop)
+   • Animaciones suaves
+   • Colores modernos
+   • Interfaz intuitiva
+
+───────────────────────────────────────────────────────────────────────
+
+⚙️ CONFIGURACIÓN
+
+CAMBIAR PUERTO (por defecto 5000)
+═════════════════════════════════════════════════════════════════════
+
+Edita run.py, última línea:
+
+    app.run(host='127.0.0.1', port=5001)  # Cambiar 5000 por otro número
+
+CAMBIAR CLAVE DE SESIÓN
+═════════════════════════════════════════════════════════════════════
+
+En app/__init__.py, línea 25:
+
+    app.secret_key = 'tu_nueva_clave_secreta'
+
+NOTA: En producción, usar una clave más segura.
+
+───────────────────────────────────────────────────────────────────────
+
+🐛 PROBLEMAS COMUNES
+
+PROBLEMA: "Port 5000 already in use"
+SOLUCIÓN: Cambiar puerto (ver sección de configuración arriba)
+
+PROBLEMA: "ModuleNotFoundError: No module named 'flask'"
+SOLUCIÓN: pip install -r requirements.txt
+
+PROBLEMA: "TemplateNotFoundError: index.html"
+SOLUCIÓN: Verifica que templates/ exista en la raíz del proyecto
+
+PROBLEMA: "No such table: usuarios"
+SOLUCIÓN: Elimina database/prototipo.db y reinicia (se recrea automáticamente)
+
+Para más ayuda, ver TROUBLESHOOTING.md
+
+───────────────────────────────────────────────────────────────────────
+
+📚 DOCUMENTACIÓN
+
+Para más información:
+• README.md ........... Documentación completa
+• QUICK_START.md ...... Guía de inicio rápido
+• CAMBIOS.md .......... Resumen de cambios realizados
+• TROUBLESHOOTING.md .. Solución de problemas
+• INDICE.md ........... Índice completo de archivos
+
+───────────────────────────────────────────────────────────────────────
+
+✨ CARACTERÍSTICAS ESPECIALES
+
+• Validación en tiempo real .... Los campos se validan mientras escribes
+• Animaciones suaves ........... Transiciones agradables
+• Diseño moderno ............... Gradientes y sombras
+• Mobile-first ................. Optimizado para cualquier dispositivo
+• Sin dependencias externas .... Solo HTML, CSS y JavaScript vanilla
+• Base de datos local .......... SQLite integrado
+• Fácil de modificar ........... Código limpio y bien documentado
+
+───────────────────────────────────────────────────────────────────────
+
+🚀 PRÓXIMAS FUNCIONALIDADES A AGREGAR
+
+• Sistema de blogs funcional
+• Comentarios en blogs
+• Sistema de seguimiento
+• Notificaciones
+• Búsqueda de contenido
+• Carga de imágenes
+• Panel de administración
+• Estadísticas de usuario
+• Exportación de datos
+
+───────────────────────────────────────────────────────────────────────
+
+📞 INFORMACIÓN TÉCNICA
+
+TECNOLOGÍAS USADAS:
+• Python 3.7+
+• Flask 3.0+
+• SQLite
+• HTML5
+• CSS3
+• JavaScript (vanilla)
+
+REQUIERE:
+• Python 3.7 o superior
+• pip (gestor de paquetes Python)
+• 100 MB de espacio en disco
+• Navegador web moderno
+
+VERSION: 0.0.3
+ESTADO: Funcional y en desarrollo
+FECHA: Diciembre 2025
+
+───────────────────────────────────────────────────────────────────────
+
+¡LISTO PARA USAR! 🎉
+
+1. python run.py
+2. Abre http://127.0.0.1:5000
+3. ¡Registra y comienza a usar!
+
+═══════════════════════════════════════════════════════════════════════
